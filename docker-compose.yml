@@ -1,6 +1,7 @@
 version: '3.8'
+
 services:
-  frontend:
+   frontend:
     build:
       context: ./frontend  # Path to your frontend directory
       dockerfile: Dockerfile
@@ -9,7 +10,24 @@ services:
 
   backend:
     build:
-      context: ./backend  # Path to your backend directory
+      context: ./backend
       dockerfile: Dockerfile
     ports:
       - "5000:5000"
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URL=mongodb+srv://krishna1137:ModIApJlNNxo2GZo@cluster0.kwehlxp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+
+  mongo:
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: krishna1137
+      MONGO_INITDB_ROOT_PASSWORD: ModIApJlNNxo2GZo@cluster0
+      MONGO_INITDB_DATABASE: test
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
