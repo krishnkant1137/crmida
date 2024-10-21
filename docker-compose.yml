@@ -1,14 +1,15 @@
+version: '3.8'
 services:
+  frontend:
+    build:
+      context: ./frontend  # Path to your frontend directory
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+
   backend:
     build:
-      context: ./backend
+      context: ./backend  # Path to your backend directory
       dockerfile: Dockerfile
     ports:
       - "5000:5000"
-
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "80:80"  # Assuming Nginx serves your frontend
