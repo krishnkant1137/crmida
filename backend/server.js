@@ -24,7 +24,10 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors()); // Enable CORS
+app.use(cors({
+  origin: 'http://3.145.137.229', // Adjust to the frontend's domain/IP
+  credentials: true,
+})); // Enable CORS
 app.use(express.json()); // For parsing application/json
 app.use(express.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
 app.use('/uploads', express.static('uploads')); // Serve uploaded files
