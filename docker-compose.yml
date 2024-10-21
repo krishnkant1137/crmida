@@ -21,8 +21,10 @@ services:
     depends_on:
       - mongo  # Ensure mongo is started before backend
 
-  mongo:
+  mongodb:
     image: mongo:latest
+    ports:
+      -  '27017:27017'
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: krishna1137
