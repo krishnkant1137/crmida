@@ -17,14 +17,14 @@ services:
     ports:
       - "5000:5000"
     environment:
-      MONGO_URL: mongodb+srv://krishna1137:ModIApJlNNxo2GZo@cluster0.kwehlxp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0  # Connection string for MongoDB
+      MONGO_URL: mongodb://krishna1137:ModIApJlNNxo2GZo@mongodb:27017/test  # Use internal MongoDB connection string
     depends_on:
-      - mongo  # Ensure mongo is started before backend
+      - mongodb  # Ensure mongodb is started before backend
 
   mongodb:
     image: mongo:latest
     ports:
-      -  '27017:27017'
+      - "27017:27017"  # Expose MongoDB on port 27017
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: krishna1137
