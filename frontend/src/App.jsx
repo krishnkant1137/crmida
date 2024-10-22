@@ -38,7 +38,7 @@ function App() {
         <div
           className="min-h-screen bg-cover bg-center p-6"
           style={{
-            backgroundImage: "url('/path/to/your/background-image.jpg')",
+            backgroundImage: "url('https://res.cloudinary.com/dpwcvgpt3/image/upload/v1729494553/blauc6qmmxwxaqdgdago.jpg')",
           }}
         >
           <Routes>

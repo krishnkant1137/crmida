@@ -94,7 +94,7 @@ const AdmissionForm = () => {
       const formattedPaymentDate = formatDate(formData.paymentDate);
 
       // Now you can send these URLs along with other form data to your backend
-      const response = await axios.post('http://3.145.137.229:5000/api/admissions/submit', {
+      const response = await axios.post('http://3.145.137.229:5000/api/admissions', {
         ...formData,
         dob: formattedDobDate,
         aadhaarCardUrl: aadhaarUrl,
@@ -406,7 +406,7 @@ const AdmissionForm = () => {
       </div>
       {/* Father Number */}
       <div>
-        <label className="block mb-1">Father's Contact Number:</label>
+        <label className="block mb-1">Fathers Contact Number:</label>
         <input
           type="tel"
           name="emergencyContact.fatherNumber"
