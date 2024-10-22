@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Admission = require('../models/admission');
+const Admission = require('../models/Admission');
 const StudentPayment = require('../models/studentPayment');
 
 // Route to add a payment
