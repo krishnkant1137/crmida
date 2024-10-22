@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Admission = require('../models/Admission');
-const StudentPayment = require('../models/studentPayment');
+const StudentPayment = require('../models/StudentPayment');
 
 // Route to add a payment
 router.patch('/:rollNumber', async (req, res) => {
