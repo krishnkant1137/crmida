@@ -15,7 +15,7 @@ const StudentProfile = () => {
     const fetchStudentData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:5000/api/enrolled-students/${studentId}`);
+        const response = await axios.get(`${process.env.VITE_BASE_URL}/api/enrolled-students/${studentId}`);
         const data = response.data;
 
         const amountPaid = Number(data.paymentReceived);
@@ -73,7 +73,7 @@ const StudentProfile = () => {
 
     try {
       const response = await axios.patch(
-        `http://localhost:5000/api/enrolled-students/${studentId}`,
+        `${process.env.VITE_BASE_URL}/api/enrolled-students/${studentId}`,
         {  amountPaid: paymentAmount,
            }
       );

@@ -7,7 +7,7 @@ const AllEnrolledStudents = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/enrolled-students')
+    axios.get(`${process.env.VITE_BASE_URL}/api/enrolled-students`)
       .then(response => {
         setStudents(response.data);
       })

@@ -2,7 +2,15 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+
+
+
+//import d from '../../../../../../frontend/.env';
+
+
+
 const SalesLogin = () => {
+ // var demo = d.VITE_BASE_URL;
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
@@ -13,6 +21,7 @@ const SalesLogin = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    console.log(import.meta.env.VITE_BASE_URL);
     try {
       console.log('Sending login request:', { username, password });
       
@@ -21,7 +30,7 @@ const SalesLogin = () => {
       localStorage.removeItem('salesAuthToken');
       localStorage.removeItem('userRole');
 
-      const response = await axios.post('http://3.145.137.229:5000/api/sales/login', {
+      const response = await axios.post(`http://localhost:5000/api/sales/login`, {
         username,
         password,
       });

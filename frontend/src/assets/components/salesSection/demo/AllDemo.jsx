@@ -10,7 +10,7 @@ const AllDemo = () => {
     // Fetch demo data when component loads
     const fetchDemoData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/demo'); // Fetching from backend API
+        const response = await axios.get(`${process.env.VITE_BASE_URL}/api/demo`); // Fetching from backend API
         setDemos(response.data); // Store fetched data in state
       } catch (error) {
         console.error('Error fetching demo data:', error);

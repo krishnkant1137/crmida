@@ -23,7 +23,7 @@ const Demo = () => {
     };
 
     try {
-      await axios.post('http://localhost:5000/api/demo', demoData);
+      await axios.post(`${process.env.VITE_BASE_URL}/api/demo`, demoData);
       alert('Demo successfully recorded!');
       // Reset form fields
       setName('');

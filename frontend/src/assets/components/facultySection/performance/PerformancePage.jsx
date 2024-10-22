@@ -15,7 +15,7 @@ const PerformancePage = () => {
     const fetchPerformanceData = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:5000/api/performance/attendance-performance');
+        const response = await fetch(`${process.env.VITE_BASE_URL}/api/performance/attendance-performance`);
         if (!response.ok) throw new Error('Failed to fetch performance data');
         const data = await response.json();
         setPerformanceData(data);
@@ -31,7 +31,7 @@ const PerformancePage = () => {
   const handleClassificationChange = async (rollNumber, newClassification) => {
     try {
       setIsUpdating(true);
-      const response = await fetch(`http://localhost:5000/api/performance/${rollNumber}`, {
+      const response = await fetch(`${process.env.VITE_BASE_URL}/api/performance/${rollNumber}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

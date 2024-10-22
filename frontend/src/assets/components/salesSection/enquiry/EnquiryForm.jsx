@@ -45,7 +45,7 @@ const EnquiryForm = () => {
       const formattedData = {
         ...formData,
       enquiryDate: new Date(),      };
-      await axios.post("http://localhost:5000/api/enquiry", formattedData);
+      await axios.post(`${process.env.VITE_BASE_URL}/api/enquiry`, formattedData);
       setSuccessMessage(true); 
 
       // Reset form data, including other course and source fields
