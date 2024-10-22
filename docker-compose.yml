@@ -16,9 +16,22 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5000:5000"
-    environment:
-      - MONGO_URI=mongodb+srv://krishna1137:ModIApJlNNxo2GZo@cluster0.kwehlxp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-      - JWT_SECRET=${JWT_SECRET}
-      - NODE_ENV=production
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - mongodb
 
-  # No need for MongoDB container since you're using MongoDB Atlas for production.
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: krishna1137
+      MONGO_INITDB_ROOT_PASSWORD: ModIApJlNNxo2GZo
+      MONGO_INITDB_DATABASE: test
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
