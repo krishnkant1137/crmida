@@ -3,7 +3,7 @@ const router = express.Router();
 const Admission = require('../models/Admission');
 
 // POST route to handle form submission
-router.post('/admissions', async (req, res) => {
+router.post('/', async (req, res) => {
   const {
     serialNumber,
     rollNumber,
