@@ -17,7 +17,11 @@ const BatchPage = () => {
     const fetchBatches = async () => {
       setLoading(true);
       try {
+<<<<<<< HEAD
         const response = await fetch(`${process.env.VITE_BASE_URL}/api/batches`);
+=======
+        const response = await fetch(`http://${process.env.VITE_HOST_IP}:5000/api/batches`);
+>>>>>>> 27fcfd3843f0a564ea9a9626788ad71730aa9e97
         if (!response.ok) throw new Error("Failed to fetch batches");
         const data = await response.json();
         console.log("Fetched Batches:", data);
