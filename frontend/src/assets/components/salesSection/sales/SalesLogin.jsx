@@ -30,7 +30,7 @@ const SalesLogin = () => {
       localStorage.removeItem('salesAuthToken');
       localStorage.removeItem('userRole');
 
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/sales/login`, {
+      const response = await axios.post(`http://3.145.137.229:5000/api/sales/login`, {
         username,
         password,
     });
