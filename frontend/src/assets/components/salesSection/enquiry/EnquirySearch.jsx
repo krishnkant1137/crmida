@@ -15,7 +15,7 @@ const EnquirySearch = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.get(`${process.env.VITE_BASE_URL}/api/students/search?phone=${phoneNumber}`);
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/students/search?phone=${phoneNumber}`);
       setStudentData(res.data);
       setResponse(res.data.response || '');
     } catch (error) {
@@ -31,7 +31,7 @@ const EnquirySearch = () => {
     e.preventDefault();
     setUpdateLoading(true);
     try {
-      const res = await axios.put('${process.env.VITE_BASE_URL}/api/students/enquiry/update-response', {
+      const res = await axios.put('${import.meta.env.VITE_BACKEND_URL}/api/students/enquiry/update-response', {
         phoneNumber,
         response,
       });
