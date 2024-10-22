@@ -138,9 +138,7 @@ function App() {
             <Route
               path="/facultiesDashboard"
               element={
-                <PrivateRoute allowedRoles={["faculty"]}>
-                  <FacultyDashboard />
-                </PrivateRoute>
+                <FacultyDashboard />
               }
             />
             <Route path="/facultiesDashboard/batch" element={<BatchPage />} />

@@ -15,7 +15,7 @@ const PerformancePage = () => {
     const fetchPerformanceData = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`http://3.145.137.229:5000/api/performance/attendance-performance`);
+        const response = await fetch('http://3.145.137.229:5000/api/performance/attendance-performance');
         if (!response.ok) throw new Error('Failed to fetch performance data');
         const data = await response.json();
         setPerformanceData(data);

@@ -20,7 +20,7 @@ const AdminLogin = () => {
     console.log('Sending payload:', payload); // Log payload before sending
 
     try {
-      const response = await axios.post(`http://3.145.137.229:5000/api/admin/login`, payload);
+      const response = await axios.post('http://3.145.137.229:5000/api/admin/login', payload);
       
       if (response.data.token) {
         localStorage.setItem('adminAuthToken', response.data.token);
