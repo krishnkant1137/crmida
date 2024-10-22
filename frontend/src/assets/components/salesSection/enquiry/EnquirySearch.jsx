@@ -15,7 +15,7 @@ const EnquirySearch = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/students/search?phone=${phoneNumber}`);
+      const res = await axios.get(`http://3.145.137.229:5000/api/students/search?phone=${phoneNumber}`);
       setStudentData(res.data);
       setResponse(res.data.response || '');
     } catch (error) {

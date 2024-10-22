@@ -12,7 +12,7 @@ const AllEnquiry = () => {
 
   const fetchEnquiries = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/enquiry`);
+      const response = await axios.get('http://3.145.137.229:5000/api/enquiry');
       setEnquiries(response.data);
     } catch (error) {
       console.error('Error fetching enquiries:', error);

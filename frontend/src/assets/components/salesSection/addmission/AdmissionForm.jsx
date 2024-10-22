@@ -94,7 +94,7 @@ const AdmissionForm = () => {
       const formattedPaymentDate = formatDate(formData.paymentDate);
 
       // Now you can send these URLs along with other form data to your backend
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/admissions/submit`, {
+      const response = await axios.post('http://3.145.137.229:5173/api/admissions/submit', {
         ...formData,
         dob: formattedDobDate,
         aadhaarCardUrl: aadhaarUrl,

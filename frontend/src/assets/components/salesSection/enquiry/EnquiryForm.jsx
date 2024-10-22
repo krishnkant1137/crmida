@@ -1,289 +1,118 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { Alert, AlertTitle } from '@mui/material';
+import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-const EnquiryForm = () => {
+const EnquirySearch = () => {
   const navigate = useNavigate();
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [studentData, setStudentData] = useState(null);
+  const [response, setResponse] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [updateLoading, setUpdateLoading] = useState(false);
 
-  const [formData, setFormData] = useState({
-    enquiryDate: "",
-    fullName: "",
-    mobileNumber: "",
-    email: "",
-    address: "",
-    collegeName: "",
-    stream: "",
-    passingYear: "",
-    courseName: "",
-    otherCourse: "", // Initialize for other course input
-    source: "",
-    otherSource: "", // Initialize for other source input
-  });
-  const [showOtherCourse, setShowOtherCourse] = useState(false);
-  const [showOtherSource, setShowOtherSource] = useState(false);
-  const [successMessage, setSuccessMessage] = useState(false);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-
-    if (name === "courseName" && value === "Other") {
-      setShowOtherCourse(true);
-    } else if (name === "source" && value === "Other") {
-      setShowOtherSource(true);
-    } else {
-      setShowOtherCourse(false);
-      setShowOtherSource(false);
+  // Handle search
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const res = await axios.get(`http://localhost:5000/api/students/search?phone=${phoneNumber}`);
+      setStudentData(res.data);
+      setResponse(res.data.response || '');
+    } catch (error) {
+      console.error('Error fetching student data:', error);
+      alert('Error fetching student data');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleSubmit = async (e) => {
+  // Update the enquiry response
+  const handleUpdateResponse = async (e) => {
     e.preventDefault();
+    setUpdateLoading(true);
     try {
-      // Format the enquiryDate to ISO string for consistency
-      const formattedData = {
-        ...formData,
-      enquiryDate: new Date(),      };
-      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/enquiry`, formattedData);
-      setSuccessMessage(true); 
-
-      // Reset form data, including other course and source fields
-      setFormData({
-        enquiryDate: "",
-        fullName: "",
-        mobileNumber: "",
-        email: "",
-        address: "",
-        collegeName: "",
-        stream: "",
-        passingYear: "",
-        courseName: "",
-        otherCourse: "",
-        source: "",
-        otherSource: "",
+      const res = await axios.put('http://3.145.137.229:5000/api/students/enquiry/update-response', {
+        phoneNumber,
+        response,
       });
+      console.log('Response updated successfully:', res.data);
+      alert('Response updated successfully!');
     } catch (error) {
-      console.error(error);
-      alert("Error submitting enquiry");
+      console.error('Error updating enquiry:', error);
+      alert('Error updating the response.');
+    } finally {
+      setUpdateLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
-    
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-lg">
-      <button
-        onClick={() => navigate('/salesDashboard')}
-        className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 mb-4"
-      >
-        Back
-      </button>
-        <h2 className="text-center text-3xl font-bold text-gray-800">
-        
-          Student Enquiry Form
-        </h2>
-        {successMessage && ( // Show success alert message
-          <Alert severity="success" onClose={() => setSuccessMessage(false)}>
-            <AlertTitle>Success</AlertTitle>
-            This is a success Alert with an encouraging title.
-          </Alert>
-        )}
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Enquiry Date
-            </label>
-            <input
-              type="date"
-              name="enquiryDate"
-              value={formData.enquiryDate}
-              onChange={handleChange}
-              className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Full Name
-            </label>
-            <input
-              type="text"
-              name="fullName"
-              value={formData.fullName}
-              onChange={handleChange}
-              placeholder="Full Name"
-              className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              required
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Mobile Number
-              </label>
-              <input
-                type="text"
-                name="mobileNumber"
-                value={formData.mobileNumber}
-                onChange={handleChange}
-                placeholder="Mobile Number"
-                className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Email"
-                className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                required
-              />
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Address
-            </label>
-            <textarea
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              placeholder="Address"
-              className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              required
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                College Name
-              </label>
-              <input
-                type="text"
-                name="collegeName"
-                value={formData.collegeName}
-                onChange={handleChange}
-                placeholder="College Name"
-                className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Stream
-              </label>
-              <input
-                type="text"
-                name="stream"
-                value={formData.stream}
-                onChange={handleChange}
-                placeholder="Stream"
-                className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                required
-              />
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Passing Year
-            </label>
-            <input
-              type="text"
-              name="passingYear"
-              value={formData.passingYear}
-              onChange={handleChange}
-              placeholder="Passing Year"
-              className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Course Name
-            </label>
-            <select
-              name="courseName"
-              value={formData.courseName}
-              onChange={handleChange}
-              className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              required
-            >
-              <option value="Business Analytics">Business Analytics</option>
-              <option value="Data Analytics">Data Analytics</option>
-              <option value="Data Science">Data Science</option>
-              <option value="Java Full Stack">Java Full Stack</option>
-              <option value="MERN Stack">MERN Stack</option>
-              <option value="React Development">React Development</option>
-              <option value="Python Development">Python Development</option>
-              <option value="Salesforce">Salesforce</option>
-              <option value="Software Testing">Software Testing</option>
-              <option value="Digital Marketing">Digital Marketing</option>
-              <option value="DSA">DSA</option>
-              <option value="Regarding Internship">Regarding Internship</option>
-              <option value="Regarding Placement">Regarding Placement</option>
-              <option value="Other">Other</option>
-            </select>
-            {showOtherCourse && (
-              <input
-                type="text"
-                name="otherCourse"
-                value={formData.otherCourse}
-                onChange={handleChange}
-                placeholder="Please specify the course"
-                className="mt-2 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              />
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Source
-            </label>
-            <select
-              name="source"
-              value={formData.source}
-              onChange={handleChange}
-              className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              required
-            >
-              <option value="">Select Source</option>
-              <option value="Google">Google</option>
-              <option value="Direct">Direct</option>
-              <option value="Just Dial">Just Dial</option>
-              <option value="Sulekha">Sulekha</option>
-              <option value="Referred by Friends">Referred by Friends</option>
-              <option value="Referred by Faculty">Referred by Faculty</option>
-              <option value="Calling">Calling</option>
-              <option value="Social Media">Social Media</option>
-              <option value="Other">Other</option>
-            </select>
-            {showOtherSource && (
-              <input
-                type="text"
-                name="otherSource"
-                value={formData.otherSource}
-                onChange={handleChange}
-                placeholder="Please specify the source"
-                className="mt-2 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              />
-            )}
-          </div>
+    <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-lg mt-8 pt-20">
+       <button
+          onClick={() => navigate('/salesDashboard')}
+          className="bg-gray-500 text-white p-2 rounded-lg hover:bg-gray-600 transition duration-200"
+        >
+          Back
+        </button>
+     <div className="flex justify-center mb-4">
+     
+      <h1 className="text-center text-3xl font-bold text-gray-800 mb-6">Student Enquiry Section</h1>
+
+     
+      </div>
+
+      {/* Search Section */}
+      <form onSubmit={handleSearch} className="mb-6">
+        <div className="flex justify-center">
+          <input
+            type="text"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            placeholder="Enter Phone Number"
+            className="border border-gray-300 p-3 rounded-lg w-1/2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white p-3 rounded-lg shadow-md hover:bg-blue-700 transition duration-200"
+            className="ml-2 bg-blue-600 text-white p-3 rounded-lg transition duration-200 hover:bg-blue-700"
           >
-            Submit Enquiry
+            {loading ? 'Searching...' : 'Search'}
           </button>
-        </form>
-      </div>
+        </div>
+      </form>
+
+      {/* Display Student Data */}
+      {studentData && (
+        <div className="mt-6 p-4 border border-gray-300 rounded-lg bg-gray-50">
+          <h2 className="text-lg font-semibold mb-2">Student Details:</h2>
+          <p><strong>Full Name:</strong> {studentData.fullName}</p>
+          <p><strong>Email:</strong> {studentData.email}</p>
+          <p><strong>Address:</strong> {studentData.address}</p>
+          <p><strong>Course:</strong> {studentData.courseName}</p>
+          <p><strong>College Name:</strong> {studentData.collegeName}</p>
+          <p><strong>Response:</strong> {studentData.response}</p>
+
+          {/* Update Response Section */}
+          <form onSubmit={handleUpdateResponse} className="mt-4">
+            <textarea
+              placeholder="Enter new response"
+              value={response}
+              onChange={(e) => setResponse(e.target.value)}
+              className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+            <button
+              type="submit"
+              className="mt-2 bg-green-600 text-white p-2 rounded-lg hover:bg-green-700 transition duration-200"
+            >
+              {updateLoading ? 'Updating...' : 'Update Response'}
+            </button>
+          </form>
+        </div>
+      )}
+
+      {!studentData && !loading && <p className="text-center mt-4 text-gray-500">No student found. Please search again.</p>}
     </div>
   );
 };
 
-export default EnquiryForm; 
+export default EnquirySearch;
