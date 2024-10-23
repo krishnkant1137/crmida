@@ -7,7 +7,7 @@ const AllEnrolledStudents = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('http://http://3.145.137.229/api/enrolled-students')
+    axios.get('http://3.145.137.229/api/enrolled-students')
       .then(response => {
         setStudents(response.data);
       })
