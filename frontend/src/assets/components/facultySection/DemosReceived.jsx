@@ -73,14 +73,16 @@ const DemosReceived = () => {
     }
   };
 
+  // Updated renderTableRows with Serial Number (S. No.)
   const renderTableRows = (demos, isPending) =>
-    demos.map((demo) => (
-      <tr key={demo.id} className="border-b border-gray-300 bg-white hover:bg-gray-100 transition duration-200">
-        <td className="px-6 py-4 text-gray-800">{demo.studentName}</td>
-        <td className="px-6 py-4 text-gray-800">{demo.phoneNumber}</td>
-        <td className="px-6 py-4 text-gray-800">{demo.courseName}</td>
-        <td className="px-6 py-4 text-gray-800">{demo.demoDate}</td>
-        <td className="px-6 py-4 text-gray-800">{demo.batchTime}</td>
+    demos.map((demo, index) => (
+      <tr key={demo.id} className="border-t border-gray-300">
+        <td className="px-6 py-4 text-gray-800 border-r border-gray-300">{index + 1}</td> {/* Serial Number */}
+        <td className="px-6 py-4 text-gray-800 border-r border-gray-300">{demo.studentName}</td>
+        <td className="px-6 py-4 text-gray-800 border-r border-gray-300">{demo.phoneNumber}</td>
+        <td className="px-6 py-4 text-gray-800 border-r border-gray-300">{demo.courseName}</td>
+        <td className="px-6 py-4 text-gray-800 border-r border-gray-300">{demo.demoDate}</td>
+        <td className="px-6 py-4 text-gray-800 border-r border-gray-300">{demo.batchTime}</td>
         <td className="px-6 py-4 text-gray-800 space-x-4">
           {isPending ? (
             <button
@@ -137,9 +139,10 @@ const DemosReceived = () => {
         <div>
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">Pending Demos</h2>
           <div className="overflow-x-auto">
-            <table className="min-w-full table-auto border-collapse border border-gray-300 bg-gray-50 rounded-lg shadow-sm">
+            <table className="min-w-full table-auto border-collapse bg-gray-50 rounded-lg shadow-sm">
               <thead>
                 <tr className="bg-gray-200 text-gray-700">
+                  <th className="px-6 py-4 text-left text-md font-semibold border-b border-gray-300">S. No.</th> {/* Serial No. Column Header */}
                   <th className="px-6 py-4 text-left text-md font-semibold border-b border-gray-300">Student Name</th>
                   <th className="px-6 py-4 text-left text-md font-semibold border-b border-gray-300">Phone Number</th>
                   <th className="px-6 py-4 text-left text-md font-semibold border-b border-gray-300">Course</th>
@@ -148,7 +151,7 @@ const DemosReceived = () => {
                   <th className="px-6 py-4 text-left text-md font-semibold border-b border-gray-300">Actions</th>
                 </tr>
               </thead>
-              <tbody>{pendingDemos.length > 0 ? renderTableRows(pendingDemos, true) : <tr><td colSpan="6" className="text-center py-4 text-gray-600">No pending demos.</td></tr>}</tbody>
+              <tbody>{pendingDemos.length > 0 ? renderTableRows(pendingDemos, true) : <tr><td colSpan="7" className="text-center py-4 text-gray-600">No pending demos.</td></tr>}</tbody>
             </table>
           </div>
         </div>
@@ -156,9 +159,10 @@ const DemosReceived = () => {
         <div>
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">Completed Demos</h2>
           <div className="overflow-x-auto">
-            <table className="min-w-full table-auto border-collapse border border-gray-300 bg-gray-50 rounded-lg shadow-sm">
+            <table className="min-w-full table-auto border-collapse bg-gray-50 rounded-lg shadow-sm">
               <thead>
                 <tr className="bg-gray-200 text-gray-700">
+                  <th className="px-6 py-4 text-left text-md font-semibold border-b border-gray-300">S. No.</th> {/* Serial No. Column Header */}
                   <th className="px-6 py-4 text-left text-md font-semibold border-b border-gray-300">Student Name</th>
                   <th className="px-6 py-4 text-left text-md font-semibold border-b border-gray-300">Phone Number</th>
                   <th className="px-6 py-4 text-left text-md font-semibold border-b border-gray-300">Course</th>
@@ -167,7 +171,7 @@ const DemosReceived = () => {
                   <th className="px-6 py-4 text-left text-md font-semibold border-b border-gray-300">Actions</th>
                 </tr>
               </thead>
-              <tbody>{completedDemos.length > 0 ? renderTableRows(completedDemos, false) : <tr><td colSpan="6" className="text-center py-4 text-gray-600">No completed demos.</td></tr>}</tbody>
+              <tbody>{completedDemos.length > 0 ? renderTableRows(completedDemos, false) : <tr><td colSpan="7" className="text-center py-4 text-gray-600">No completed demos.</td></tr>}</tbody>
             </table>
           </div>
         </div>
