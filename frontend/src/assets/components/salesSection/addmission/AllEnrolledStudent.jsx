@@ -7,15 +7,13 @@ const AllEnrolledStudents = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchStudents = async () => {
-      try {
-        const response = await axios.get('http://3.145.137.229:5000/api/enrolled-students');
+    axios.get('http://3.145.137.229:5000/api/enrolled-students')
+      .then(response => {
         setStudents(response.data);
-      } catch (error) {
+      })
+      .catch(error => {
         console.error('Error fetching enrolled students:', error);
-      }
-    };
-    fetchStudents();
+      });
   }, []);
 
   const handleViewProfile = (studentId) => {
@@ -33,17 +31,16 @@ const AllEnrolledStudents = () => {
       <h1 className="text-center text-5xl font-extrabold text-blue-900 mb-10">All Enrolled Students</h1>
       <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {students.length > 0 ? (
-          students.map((student) => (
-            <div key={student._id} className="bg-white p-6 rounded-xl shadow-lg transform transition duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-1">
+          students.map((student, index) => (
+            <div key={index} className="bg-white p-6 rounded-xl shadow-lg transform transition duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-1">
               <div className="flex items-center space-x-4 mb-4">
                 <img 
-                  src={student.passportPhoto || 'https://via.placeholder.com/100'} // Display the profile photo or a placeholder if not available
+                  src={student.passportPhoto || 'https://via.placeholder.com/100'}
                   alt={`${student.fullName}'s profile`}
                   className="w-16 h-16 rounded-full object-cover"
                 />
                 <h2 className="text-2xl font-bold text-gray-800">{student.fullName}</h2>
               </div>
-              <p className="text-gray-600">Admission Date: <span className="font-medium">{new Date(student.admissionDate).toLocaleDateString()}</span></p>
               <p className="text-gray-600">Roll Number: <span className="font-medium">{student.rollNumber}</span></p>
               <p className="text-gray-600">Email: <span className="font-medium">{student.email}</span></p>
               <p className="text-gray-600">Phone: <span className="font-medium">{student.mobileNumber}</span></p>
