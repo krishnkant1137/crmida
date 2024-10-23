@@ -65,7 +65,7 @@ const AttendancePage = () => {
 
     try {
       setIsSubmitting(true);
-      const response = await fetch("/api/attendance/submit-attendance", {
+      const response = await fetch("http://3.145.137.229:5000/api/attendance/submit-attendance", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
