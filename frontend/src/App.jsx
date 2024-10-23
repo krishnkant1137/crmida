@@ -8,7 +8,7 @@ import AllEnquiry from "./assets/components/salesSection/enquiry/AllEnquiry";
 import Demo from "./assets/components/salesSection/demo/Demo";
 import AllDemo from "./assets/components/salesSection/demo/AllDemo";
 import PrivateRoute from "./assets/components/others/PrivateRoute";
-import BatchPage from "./assets/components/facultySection/Batchpage";
+import BatchPage from "./assets/components/facultySection/BatchPage"; // Correct spelling of BatchPage
 import SalesLogin from "./assets/components/salesSection/sales/SalesLogin";
 import Unauthorized from "./assets/components/others/Unauthorized";
 import EnrolledStudent from "./assets/components/salesSection/addmission/AdmissionForm";
@@ -28,13 +28,13 @@ import AdminDashboard from "./assets/components/adminSection/AdminDashboard";
 import SeeAllSections from "./assets/components/adminSection/SeeAllSections";
 import RevenueChart from "./assets/components/adminSection/RevenueChart";
 import RevenueLineChart from "./assets/components/adminSection/RevenueLineChart";
+import DemosReceived from "./assets/components/facultySection/DemosReceived"; // Correct path for DemosReceived
 
 function App() {
   return (
     <>
       <Router>
         <Navbar />
-        {/* Background image for the entire app */}
         <div
           className="min-h-screen bg-cover bg-center p-6"
           style={{
@@ -46,8 +46,7 @@ function App() {
             <Route path="/faculties/login" element={<FacultyLogin />} />
             <Route path="/HR/login" element={<HRLogin />} />
             <Route path="/admin/login" element={<AdminLogin />} />
-            
-            {/* Landing page with animated buttons */}
+
             <Route
               path="/"
               element={
@@ -85,66 +84,23 @@ function App() {
               }
             />
 
-            {/* Other routes */}
-            <Route
-              path="/salesDashboard"
-              element={
-                <SalesDashboard />
-              }
-            />
-            <Route
-              path="/sales/search-student"
-              element={
-                <SearchStudent />
-
-              }
-            />
-            <Route
-              path="/sales/student-enquiry"
-              element={
-                <StudentEnquiry />
-
-              }
-            />
-            <Route
-              path="/sales/all-enquiry"
-              element={
-                <AllEnquiry />
-
-              }
-            />
-            <Route
-              path="/sales/demo"
-              element={
-                <Demo />
-              }
-            />
-            <Route
-              path="/sales/all-demo"
-              element={
-                <AllDemo />
-              }
-            />
-            <Route
-              path="/sales/enrolled-students"
-              element={
-                <EnrolledStudent />
-              }
-            />
+            <Route path="/salesDashboard" element={<SalesDashboard />} />
+            <Route path="/sales/search-student" element={<SearchStudent />} />
+            <Route path="/sales/student-enquiry" element={<StudentEnquiry />} />
+            <Route path="/sales/all-enquiry" element={<AllEnquiry />} />
+            <Route path="/sales/demo" element={<Demo />} />
+            <Route path="/sales/all-demo" element={<AllDemo />} />
+            <Route path="/sales/enrolled-students" element={<EnrolledStudent />} />
             <Route path="/sales/all-enrolled-students" element={<AllEnrolledStudents />} />
             <Route path="/students/:studentId" element={<StudentProfile />} />
 
             {/* Faculties section routes */}
-            <Route
-              path="/facultiesDashboard"
-              element={
-                <FacultyDashboard />
-              }
-            />
+            <Route path="/facultiesDashboard" element={<FacultyDashboard />} />
             <Route path="/facultiesDashboard/batch" element={<BatchPage />} />
             <Route path="/facultiesDashboard/attendance" element={<AttendancePage />} />
             <Route path="/facultiesDashboard/performance" element={<PerformancePage />} />
             <Route path="/facultiesDashboard/resourceSharing" element={<ResourceSharing />} />
+            <Route path="/facultiesDashboard/demosReceived" element={<DemosReceived />} />
 
             {/* HR section routes */}
             <Route path="/HRDashboard" element={<HRDashboard />} />
