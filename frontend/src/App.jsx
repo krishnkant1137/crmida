@@ -132,7 +132,7 @@ function App() {
               }
             />
             <Route path="/sales/all-enrolled-students" element={<AllEnrolledStudents />} />
-            <Route path="/students/:studentId" element={<StudentProfile />} />
+            <Route path="/students/:id" element={<StudentProfile />} />
 
             {/* Faculties section routes */}
             <Route

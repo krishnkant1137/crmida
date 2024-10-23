@@ -7,13 +7,15 @@ const AllEnrolledStudents = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('http://3.145.137.229:5000/api/enrolled-students')
-      .then(response => {
+    const fetchStudents = async () => {
+      try {
+        const response = await axios.get('http://3.145.137.229:5000/api/enrolled-students');
         setStudents(response.data);
-      })
-      .catch(error => {
+      } catch (error) {
         console.error('Error fetching enrolled students:', error);
-      });
+      }
+    };
+    fetchStudents();
   }, []);
 
   const handleViewProfile = (studentId) => {
@@ -31,8 +33,8 @@ const AllEnrolledStudents = () => {
       <h1 className="text-center text-5xl font-extrabold text-blue-900 mb-10">All Enrolled Students</h1>
       <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {students.length > 0 ? (
-          students.map((student, index) => (
-            <div key={index} className="bg-white p-6 rounded-xl shadow-lg transform transition duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-1">
+          students.map((student) => (
+            <div key={student._id} className="bg-white p-6 rounded-xl shadow-lg transform transition duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-1">
               <div className="flex items-center space-x-4 mb-4">
                 <img 
                   src={student.passportPhoto || 'https://via.placeholder.com/100'} // Display the profile photo or a placeholder if not available

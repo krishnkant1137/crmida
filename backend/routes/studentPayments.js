@@ -1,43 +1,48 @@
 const express = require('express');
 const router = express.Router();
-const Admission = require('../models/Admission');
 const StudentPayment = require('../models/StudentPayment');
+const Admission = require('../models/Admission'); // Import the Admission model
 
-// Route to add a payment
-router.patch('/:rollNumber', async (req, res) => {
-    const { amountPaid } = req.body;
-
+// POST a new payment record
+router.post('/', async (req, res) => {
     try {
-        // Fetch student by roll number
-        const student = await Admission.findOne({ rollNumber: req.params.rollNumber });
-        if (!student) return res.status(404).json({ message: 'Student not found' });
+        const { studentId, amountPaid, installmentNumber } = req.body;
 
         // Create a new payment record
         const payment = new StudentPayment({
-            studentId: student._id,
+            studentId,
             amountPaid,
-            installmentNumber: student.installments,
+            installmentNumber,
         });
 
-        // Save the payment record
+        // Save the payment record to the database
         await payment.save();
 
-        // Update the student's payment information
-        student.paymentReceived += amountPaid;
-        student.paymentHistory.push(payment._id);
-        student.installments = Math.max(0, student.installments - 1); // Decrement installments
-
-        await student.save();
-
-        // Response with updated information
-        res.json({
-            student,
-            remainingAmount: student.totalFee - student.paymentReceived,
-            installments: student.installments,
+        // Update the corresponding student's paymentReceived and installments fields
+        await Admission.findByIdAndUpdate(studentId, {
+            $inc: {
+                paymentReceived: amountPaid,
+                installments: 1, // Increment the number of installments
+            },
         });
+
+        res.status(201).json({ message: 'Payment recorded successfully!', payment });
     } catch (error) {
-        console.error('Error updating payment:', error);
-        res.status(500).json({ message: 'Server error' });
+        console.error('Error recording payment:', error);
+        res.status(500).json({ message: 'Failed to record payment.' });
+    }
+});
+
+// GET all payment records for a specific student
+router.get('/:studentId', async (req, res) => {
+    try {
+        const studentId = req.params.studentId; // Get the student ID from the request parameters
+        const payments = await StudentPayment.find({ studentId }).populate('studentId'); // Fetch payments for the student
+
+        res.json(payments); // Return the list of payments
+    } catch (error) {
+        console.error('Error fetching payments:', error);
+        res.status(500).json({ message: 'Failed to fetch payments.' });
     }
 });
 
