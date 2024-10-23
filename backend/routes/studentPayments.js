@@ -1,51 +1,68 @@
-// routes/studentPayments.js
 const express = require('express');
 const router = express.Router();
 const StudentPayment = require('../models/StudentPayment');
 const Admission = require('../models/Admission');
 
 // Add payment route
-router.post('/', async (req, res) => {
-    const { studentId, amount, installmentNumber, paymentMethod, receiptNumber, remarks } = req.body;
+router.put('/:id', async (req, res) => {
+    const { paymentReceived } = req.body;
 
     try {
-        // Create new payment record
-        const newPayment = new StudentPayment({
-            student: studentId,
-            amount,
-            installmentNumber,
-            paymentMethod,
-            receiptNumber,
-            remarks,
-        });
-
-        // Save payment to database
-        const savedPayment = await newPayment.save();
-
-        // Update the corresponding admission record
-        const admission = await Admission.findById(studentId);
-        if (!admission) {
-            return res.status(404).json({ message: 'Student not found' });
+        // Parse paymentReceived to ensure it's a number
+        const paymentAmount = Number(paymentReceived);
+        if (isNaN(paymentAmount) || paymentAmount <= 0) {
+            return res.status(400).json({ message: 'Invalid payment amount' });
         }
 
-        // Update payment history and payment received
-        admission.paymentHistory.push(savedPayment._id);
-        admission.paymentReceived += amount;
+        // Find the admission record to update paymentReceived
+        const admission = await Admission.findById(req.params.id);
+        if (!admission) {
+            return res.status(404).json({ message: 'Student record not found' });
+        }
 
-        // Calculate remaining fee if necessary
-        // admission.remainingFee = admission.totalFee - admission.paymentReceived;
-
+        // Update paymentReceived in Admission
+        admission.paymentReceived += paymentAmount;
         await admission.save();
 
-        res.status(201).json(savedPayment);
+        // Create a new payment entry in StudentPayment
+        const newPayment = new StudentPayment({
+            student: admission._id,
+            amount: paymentAmount,
+            installmentNumber: admission.installments,
+            paymentMethod: 'Cash', // or adjust as per your needs
+        });
+        await newPayment.save();
+
+        // Update Installment Status based on the cumulative payments
+        const remainingFee = admission.totalFee - admission.paymentReceived;
+        const installmentAmount = admission.totalFee / admission.installments;
+
+        // Initialize installmentsStatus if it's not already an array
+        if (!Array.isArray(admission.installmentsStatus)) {
+            admission.installmentsStatus = Array(admission.installments).fill('Pending');
+        }
+
+        // Ensure updates to installment statuses
+        for (let i = 0; i < admission.installments; i++) {
+            if (admission.paymentReceived >= installmentAmount * (i + 1) && admission.installmentsStatus[i] !== 'Completed') {
+                admission.installmentsStatus[i] = 'Completed';
+            }
+        }
+
+        // Save the updated admission document
+        await admission.save();
+
+        // Respond with updated data
+        res.status(200).json({ message: 'Payment updated successfully', admission });
     } catch (error) {
-        console.error('Error adding payment:', error);
-        res.status(500).json({ message: 'Failed to add payment', error });
+        console.error('Error updating payment:', error);
+        res.status(500).json({ message: 'Failed to update payment', error });
     }
 });
 
 // Get payment history for a specific student
 router.get('/:studentId', async (req, res) => {
+    console.log(`Fetching payment history for student ID: ${req.params.studentId}`);
     try {
         const payments = await StudentPayment.find({ student: req.params.studentId }).populate('student');
         res.status(200).json(payments);
