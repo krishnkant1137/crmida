@@ -34,7 +34,7 @@ router.post('/', async (req, res) => {
 });
 
 // GET all payment records for a specific student
-router.get('/:studentId', async (req, res) => {
+router.get('/api/admissions/:id', async (req, res) => {
     try {
         const studentId = req.params.studentId; // Get the student ID from the request parameters
         const payments = await StudentPayment.find({ studentId }).populate('studentId'); // Fetch payments for the student
