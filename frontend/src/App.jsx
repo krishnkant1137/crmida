@@ -34,13 +34,12 @@ function App() {
     <>
       <Router>
         <Navbar />
-        {/* Background image for the entire app */}
-        <div
+        {/* <div
           className="min-h-screen bg-cover bg-center p-6"
           style={{
             backgroundImage: "url('https://res.cloudinary.com/dpwcvgpt3/image/upload/v1729494553/blauc6qmmxwxaqdgdago.jpg')",
           }}
-        >
+        > */}
           <Routes>
             <Route path="/sales/login" element={<SalesLogin />} />
             <Route path="/faculties/login" element={<FacultyLogin />} />
@@ -158,7 +157,7 @@ function App() {
 
             <Route path="/unauthorized" element={<Unauthorized />} />
           </Routes>
-        </div>
+        {/* </div> */}
       </Router>
     </>
   );
