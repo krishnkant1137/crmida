@@ -14,8 +14,12 @@ RUN npm run build  # This should generate a 'dist' directory
 # Use a lightweight server to serve static files (e.g., nginx)
 FROM nginx:alpine
 
+# Copy custom nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # Make sure to copy from the correct stage
 COPY --from=builder /usr/src/app/dist /usr/share/nginx/html  
+
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]

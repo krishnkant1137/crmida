@@ -1,13 +1,17 @@
 const mongoose = require('mongoose');
 
-// Define the StudentPayment schema
-const StudentPaymentSchema = new mongoose.Schema({
-    studentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Admission', required: true }, // Reference to the student
-    amountPaid: { type: Number, required: true }, // Amount paid
-    installmentNumber: { type: Number, required: true }, // Installment number
-    paymentDate: { type: Date, default: Date.now }, // Date of payment
+// Payment schema
+const studentPaymentSchema = new mongoose.Schema({
+    student: { type: mongoose.Schema.Types.ObjectId, ref: 'Admission', required: true },
+    amount: { type: Number, required: true },
+    paymentDate: { type: Date, default: Date.now },
+    installmentNumber: { type: Number, required: true },
+    paymentMethod: { type: String, required: true, enum: ['Cash', 'Card', 'Online Transfer'] },
+    status: { type: String, default: 'Completed', enum: ['Completed', 'Pending', 'Failed'] },
+    receiptNumber: { type: String },
+    remarks: { type: String },
 });
 
-// Export the StudentPayment model
-const StudentPayment = mongoose.models.StudentPayment || mongoose.model('StudentPayment', StudentPaymentSchema);
+// Create the model
+const StudentPayment = mongoose.models.StudentPayment || mongoose.model('StudentPayment', studentPaymentSchema);
 module.exports = StudentPayment;

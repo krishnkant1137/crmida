@@ -1,48 +1,57 @@
+// routes/studentPayments.js
 const express = require('express');
 const router = express.Router();
 const StudentPayment = require('../models/StudentPayment');
-const Admission = require('../models/Admission'); // Import the Admission model
+const Admission = require('../models/Admission');
 
-// POST a new payment record
+// Add payment route
 router.post('/', async (req, res) => {
+    const { studentId, amount, installmentNumber, paymentMethod, receiptNumber, remarks } = req.body;
+
     try {
-        const { studentId, amountPaid, installmentNumber } = req.body;
-
-        // Create a new payment record
-        const payment = new StudentPayment({
-            studentId,
-            amountPaid,
+        // Create new payment record
+        const newPayment = new StudentPayment({
+            student: studentId,
+            amount,
             installmentNumber,
+            paymentMethod,
+            receiptNumber,
+            remarks,
         });
 
-        // Save the payment record to the database
-        await payment.save();
+        // Save payment to database
+        const savedPayment = await newPayment.save();
 
-        // Update the corresponding student's paymentReceived and installments fields
-        await Admission.findByIdAndUpdate(studentId, {
-            $inc: {
-                paymentReceived: amountPaid,
-                installments: 1, // Increment the number of installments
-            },
-        });
+        // Update the corresponding admission record
+        const admission = await Admission.findById(studentId);
+        if (!admission) {
+            return res.status(404).json({ message: 'Student not found' });
+        }
 
-        res.status(201).json({ message: 'Payment recorded successfully!', payment });
+        // Update payment history and payment received
+        admission.paymentHistory.push(savedPayment._id);
+        admission.paymentReceived += amount;
+
+        // Calculate remaining fee if necessary
+        // admission.remainingFee = admission.totalFee - admission.paymentReceived;
+
+        await admission.save();
+
+        res.status(201).json(savedPayment);
     } catch (error) {
-        console.error('Error recording payment:', error);
-        res.status(500).json({ message: 'Failed to record payment.' });
+        console.error('Error adding payment:', error);
+        res.status(500).json({ message: 'Failed to add payment', error });
     }
 });
 
-// GET all payment records for a specific student
-router.get('/api/admissions/:id', async (req, res) => {
+// Get payment history for a specific student
+router.get('/:studentId', async (req, res) => {
     try {
-        const studentId = req.params.studentId; // Get the student ID from the request parameters
-        const payments = await StudentPayment.find({ studentId }).populate('studentId'); // Fetch payments for the student
-
-        res.json(payments); // Return the list of payments
+        const payments = await StudentPayment.find({ student: req.params.studentId }).populate('student');
+        res.status(200).json(payments);
     } catch (error) {
-        console.error('Error fetching payments:', error);
-        res.status(500).json({ message: 'Failed to fetch payments.' });
+        console.error('Error fetching payment history:', error);
+        res.status(500).json({ message: 'Failed to fetch payment history', error });
     }
 });
 

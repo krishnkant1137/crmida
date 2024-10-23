@@ -6,6 +6,7 @@ const StudentPayment = () => {
   const { id } = useParams(); // Extract the student ID from the URL
   const [student, setStudent] = useState(null);
   const [error, setError] = useState('');
+  const [paymentAmount, setPaymentAmount] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,12 +24,73 @@ const StudentPayment = () => {
     fetchStudentDetails();
   }, [id]);
 
+  const handlePayment = async () => {
+    if (!paymentAmount || isNaN(paymentAmount) || Number(paymentAmount) <= 0) {
+      alert('Please enter a valid payment amount.');
+      return;
+    }
+
+    try {
+      // Calculate remaining fee and first installment amount
+      const remainingFee = student.totalFee - student.paymentReceived;
+      const numberOfInstallments = student.installments;
+      const installmentAmount = (remainingFee / numberOfInstallments).toFixed(2); // Amount per installment
+      const updatedPaymentReceived = student.paymentReceived + Number(paymentAmount);
+
+      // Update payment in the backend
+      const response = await axios.put(`http://3.145.137.229:5000/api/student-payments/${id}`, {
+        paymentReceived: updatedPaymentReceived,
+      });
+
+      if (response.status === 200) {
+        // Update local state
+        setStudent((prevStudent) => {
+          const newInstallments = [...prevStudent.installmentsStatus];
+
+          // Check if payment meets or exceeds the first installment amount
+          if (Number(paymentAmount) >= Number(installmentAmount)) {
+            newInstallments[0] = 'Completed'; // Mark first installment as completed
+          }
+
+          return {
+            ...prevStudent,
+            paymentReceived: updatedPaymentReceived,
+            installmentsStatus: newInstallments,
+          };
+        });
+        
+        // Reset payment amount
+        setPaymentAmount('');
+      } else {
+        throw new Error('Failed to update payment.');
+      }
+    } catch (err) {
+      console.error('Error updating payment:', err.message);
+      setError('Failed to update payment. Please check if the student exists and try again.');
+    }
+  };
+
   if (error) {
     return <div className="text-red-500 text-center mt-4">{error}</div>;
   }
 
   if (!student) {
     return <div className="text-center mt-4">Loading...</div>;
+  }
+
+  // Calculate remaining fee
+  const remainingFee = student.totalFee - student.paymentReceived;
+
+  // Calculate installments and due dates
+  const numberOfInstallments = student.installments; // Assuming this is the number of installments
+  const installmentAmount = (remainingFee / numberOfInstallments).toFixed(2); // Amount per installment
+  const dueDates = [];
+
+  // Calculate due dates for each installment
+  for (let i = 0; i < numberOfInstallments; i++) {
+    const dueDate = new Date();
+    dueDate.setDate(dueDate.getDate() + (i + 1) * 30); // Add 30 days for each installment
+    dueDates.push(dueDate.toLocaleDateString()); // Store the formatted due date
   }
 
   // Render the student details
@@ -61,7 +123,49 @@ const StudentPayment = () => {
           <strong>Payment Received:</strong> ₹{student.paymentReceived}
         </div>
         <div className="mb-3">
+          <strong>Remaining Fee:</strong> ₹{remainingFee} {/* Remaining fee calculation */}
+        </div>
+        <div className="mb-3">
           <strong>Installments:</strong> {student.installments}
+        </div>
+        <div className="mb-3">
+          <strong>Installment Amount:</strong> ₹{installmentAmount} {/* Amount per installment */}
+        </div>
+        <div className="mb-3">
+          <strong>Due Dates:</strong>
+          <ul>
+            {dueDates.map((date, index) => (
+              <li key={index}>Installment {index + 1}: {date}</li>
+            ))}
+          </ul>
+        </div>
+        <div className="mb-3">
+          <label htmlFor="payment" className="block mb-2 font-medium">Add Payment:</label>
+          <input
+            type="number"
+            id="payment"
+            value={paymentAmount}
+            onChange={(e) => setPaymentAmount(e.target.value)}
+            className="border rounded-md p-2 w-full"
+            placeholder="Enter payment amount"
+          />
+          <button
+            onClick={handlePayment}
+            className="mt-2 bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition duration-300 ease-in-out transform hover:scale-105"
+          >
+            Add Payment
+          </button>
+        </div>
+        {/* Display Installment Status */}
+        <div className="mt-4">
+          <h2 className="text-xl font-semibold">Installment Status:</h2>
+          <ul>
+            {student.installmentsStatus && student.installmentsStatus.map((status, index) => (
+              <li key={index}>
+                Installment {index + 1}: {status}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>
