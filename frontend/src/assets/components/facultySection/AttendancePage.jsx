@@ -19,8 +19,10 @@ const AttendancePage = () => {
         const response = await fetch("/api/attendance"); // Updated to match your route setup
         if (!response.ok) throw new Error("Failed to fetch batches");
         const data = await response.json();
+        console.log('Fetched Batches:', data);
         setBatches(data);
       } catch (err) {
+        console.error(err.message);
         setError(err.message);
       } finally {
         setLoading(false);

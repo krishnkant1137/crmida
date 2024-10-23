@@ -18,8 +18,6 @@ const performanceRoutes = require('./routes/performance');
 const HrLoginRoute = require('./routes/hrLogin');
 const adminLoginRoute = require('./routes/adminLogin');
 const hrStudentRoute = require('./routes/hrStudent');
-
-
 const app = express();
 const PORT = process.env.PORT || 5000;
 

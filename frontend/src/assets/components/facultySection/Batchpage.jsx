@@ -17,7 +17,7 @@ const BatchPage = () => {
     const fetchBatches = async () => {
       setLoading(true);
       try {
-        const response = await fetch("http://3.145.137.229:5000/api/batches");
+        const response = await fetch("/api/batches");
         if (!response.ok) throw new Error("Failed to fetch batches");
         const data = await response.json();
         console.log("Fetched Batches:", data);
