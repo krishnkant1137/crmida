@@ -9,6 +9,7 @@ const StudentPayment = () => {
   const [paymentAmount, setPaymentAmount] = useState('');
   const [loading, setLoading] = useState(false); // State to manage loading
   const [installmentAmount, setInstallmentAmount] = useState(null); // State for fixed installment amount
+  const [installmentsStatus, setInstallmentsStatus] = useState([]); // State for installment status
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,6 +23,9 @@ const StudentPayment = () => {
         const remainingFee = studentData.totalFee - studentData.paymentReceived;
         const fixedInstallmentAmount = (remainingFee / studentData.installments).toFixed(2);
         setInstallmentAmount(fixedInstallmentAmount);
+
+        // Initialize the installment status
+        setInstallmentsStatus(updateInstallmentStatus(studentData.paymentReceived, fixedInstallmentAmount, studentData.installments));
       } catch (err) {
         console.error('Error fetching student details:', err.message);
         setError('Failed to load student details.');
@@ -46,7 +50,7 @@ const StudentPayment = () => {
         return;
       }
 
-      const updatedPaymentReceived = Number(paymentAmount);
+      const updatedPaymentReceived = Number(paymentAmount) + student.paymentReceived;
 
       // Start loading
       setLoading(true);
@@ -60,15 +64,8 @@ const StudentPayment = () => {
         const updatedStudent = response.data.admission;
 
         // Update the state with the new data from the server
-        setStudent((prevStudent) => ({
-          ...prevStudent,
-          paymentReceived: updatedStudent.paymentReceived,
-          installmentsStatus: updateInstallmentStatus(
-            updatedStudent.paymentReceived,
-            installmentAmount,
-            updatedStudent.installments
-          ),
-        }));
+        setStudent(updatedStudent);
+        setInstallmentsStatus(updateInstallmentStatus(updatedStudent.paymentReceived, installmentAmount, updatedStudent.installments));
 
         // Reset payment amount
         setPaymentAmount('');
@@ -109,7 +106,7 @@ const StudentPayment = () => {
   }
 
   const remainingFee = student.totalFee - student.paymentReceived;
-  const allInstallmentsCompleted = student.installmentsStatus && student.installmentsStatus.every(status => status === 'Completed');
+  const allInstallmentsCompleted = installmentsStatus.every(status => status === 'Completed');
   const dueDates = [];
 
   for (let i = 0; i < student.installments; i++) {
@@ -168,7 +165,7 @@ const StudentPayment = () => {
         <div className="mt-4">
           <h2 className="text-xl font-semibold">Installment Status:</h2>
           <ul>
-            {student.installmentsStatus && student.installmentsStatus.map((status, index) => (
+            {installmentsStatus.map((status, index) => (
               <li key={index} className={status === 'Completed' ? 'text-green-600' : 'text-red-600'}>
                 Installment {index + 1}: {status}
               </li>

@@ -10,6 +10,7 @@ const studentPaymentSchema = new mongoose.Schema({
     status: { type: String, default: 'Completed', enum: ['Completed', 'Pending', 'Failed'] },
     receiptNumber: { type: String },
     remarks: { type: String },
+    installmentStatus: { type: String, default: 'Pending', enum: ['Completed', 'Pending'] } // New field
 });
 
 // Create the model
