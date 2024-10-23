@@ -36,7 +36,7 @@ const BatchPage = () => {
   const handleAddBatch = async () => {
     if (newBatchName) {
       try {
-        const response = await fetch("/api/batches/create", {
+        const response = await fetch("http://3.145.137.229:5000/api/batches/create", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ name: newBatchName }),
@@ -63,7 +63,7 @@ const BatchPage = () => {
       }
 
       try {
-        const response = await fetch(`/api/batches/add-student`, {
+        const response = await fetch(`http://3.145.137.229:5000/api/batches/add-student`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ rollNumber, batchId: selectedBatch._id }),
@@ -89,7 +89,7 @@ const BatchPage = () => {
   const confirmRemoveStudent = async () => {
     if (selectedBatch && isConfirmingRemoveStudent) {
       try {
-        const response = await fetch(`/api/batches/remove-student`, {
+        const response = await fetch(`http://3.145.137.229:5000/api/batches/remove-student`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -117,7 +117,7 @@ const BatchPage = () => {
 
   const confirmRemoveBatch = async (batchId) => {
     try {
-      const response = await fetch(`/api/batches/${batchId}`, {
+      const response = await fetch(`http://3.145.137.229:5000/api/batches/${batchId}`, {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Error removing batch");
