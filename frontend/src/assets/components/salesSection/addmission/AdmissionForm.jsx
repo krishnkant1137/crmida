@@ -364,7 +364,7 @@ const AdmissionForm = () => {
       </div>
       {/* Present Address */}
       <div>
-        <label className="block mb-1">Present Address:</label>
+        <label className="block mb-1">Current Address:</label>
         <input
           type="text"
           name="presentAddress"

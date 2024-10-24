@@ -114,7 +114,7 @@ const StudentPayment = () => {
     <div className="container mx-auto p-8 bg-gradient-to-r from-blue-50 to-white rounded-lg shadow-lg mt-10">
       <button
         onClick={() => navigate('/sales/all-enrolled-students')}
-        className="bg-blue-600 text-white py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105 mb-6"
+        className="bg-blue-600 text-white py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105 mb-6 "
       >
         Back
       </button>
@@ -122,7 +122,7 @@ const StudentPayment = () => {
       <div className="bg-white p-6 rounded-lg shadow-lg">
         <img 
           src={student.passportPhoto || 'https://via.placeholder.com/250'} 
-          alt={`${student.fullName}'s Profile`} 
+          alt={`${student.fullName}s Profile`} 
           className="w-32 h-32 rounded-full mb-4 mx-auto border-4 border-blue-500 object-cover" 
         />
         <div className="text-lg font-semibold text-blue-600 mb-2">{student.fullName}</div>
