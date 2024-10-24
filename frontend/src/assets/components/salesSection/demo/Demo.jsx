@@ -8,7 +8,7 @@ const Demo = () => {
   const [number, setNumber] = useState('');
   const [time, setTime] = useState('');
   const [course, setCourse] = useState('');
-  const [demoBy, setDemoBy] = useState('');
+  const [demoBy, setDemoBy] = useState(''); // This will now store the teacher's actual name
   const [isOtherSelected, setIsOtherSelected] = useState(false);
   const [otherCourse, setOtherCourse] = useState('');
 
@@ -19,11 +19,11 @@ const Demo = () => {
       number,
       time,
       course: isOtherSelected ? otherCourse : course,
-      demoBy,
+      demoBy, // This now holds the correct teacher's name
     };
 
     try {
-      await axios.post('http://3.145.137.229:5000/api/demo', demoData);
+      await axios.post('http://localhost:5000/api/demo', demoData);
       alert('Demo successfully recorded!');
       // Reset form fields
       setName('');
@@ -115,12 +115,12 @@ const Demo = () => {
             required
           >
             <option value="">Select Teacher</option>
-            <option value="teacher-1">Akshay Sir</option>
-            <option value="teacher-2">Eshwar Sir</option>
-            <option value="teacher-3">Gaurav Sir</option>
-            <option value="teacher-4">Vishal Sir</option>
-            <option value="teacher-5">Shubham Sir</option>
-            <option value="teacher-6">Nipur Sir</option>
+            <option value="Akshay Sir">Akshay Sir</option>
+            <option value="Eshwar Sir">Eshwar Sir</option>
+            <option value="Gaurav Sir">Gaurav Sir</option>
+            <option value="Vishal Sir">Vishal Sir</option>
+            <option value="Shubham Sir">Shubham Sir</option>
+            <option value="Nipur Sir">Nipur Sir</option>
           </select>
 
           <button type="submit" className="bg-green-600 text-white p-2 rounded-lg hover:bg-green-700 transition duration-200">
