@@ -3,12 +3,11 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 const FacultyDashboard = () => {
   const navigate = useNavigate();
-  const location = useLocation(); // Access the location object
-  const { selectedBatch } = location.state || {}; // Get selectedBatch from state
-  const [demoCount, setDemoCount] = useState(0); // State for demo count
+  const location = useLocation();
+  const { selectedBatch } = location.state || {};
+  const [demoCount, setDemoCount] = useState(0);
 
   useEffect(() => {
-    // Fetch demo count from backend (assuming you have an API)
     const fetchDemoCount = async () => {
       // Simulate API call here
       const count = 10; // Replace with actual API call for demo count
@@ -27,12 +26,8 @@ const FacultyDashboard = () => {
   };
 
   const handlePerformanceClick = () => {
-    navigate(`/facultiesDashboard/performance`); 
+    navigate("/facultiesDashboard/performance"); 
   };
-
-  // const handleProfileClick = () => {
-  //   alert("Profile section is under development.");
-  // };
 
   const handleResourceSharingClick = () => {
     navigate("/facultiesDashboard/resourceSharing"); 
@@ -45,10 +40,6 @@ const FacultyDashboard = () => {
   const handleLogout = () => {
     localStorage.removeItem('authToken');
     navigate('/');
-  };
-
-  const handleDemosClick = () => {
-    navigate("/facultiesDashboard/demosReceived");
   };
 
   return (
@@ -76,12 +67,6 @@ const FacultyDashboard = () => {
         >
           Performance
         </button>
-        {/* <button
-          onClick={handleProfileClick}
-          className="bg-purple-600 text-white font-bold py-3 px-6 rounded-xl shadow-md transform hover:scale-105 transition-all duration-300 ease-out hover:bg-purple-700 w-48 h-16"
-        >
-          Profile
-        </button> */}
         <button
           onClick={handleResourceSharingClick}
           className="bg-teal-600 text-white font-bold py-3 px-6 rounded-xl shadow-md transform hover:scale-105 transition-all duration-300 ease-out hover:bg-teal-700 w-48 h-16"
@@ -89,17 +74,10 @@ const FacultyDashboard = () => {
           Resource Sharing
         </button>
         <button
-<<<<<<< HEAD
-          onClick={handleDemosClick}
+          onClick={handleMyStudentDemoClick}
           className="bg-indigo-600 text-white font-bold py-3 px-6 rounded-xl shadow-md transform hover:scale-105 transition-all duration-300 ease-out hover:bg-indigo-700 w-48 h-16"
         >
-          Demos ({demoCount})
-=======
-          onClick={handleMyStudentDemoClick}
-          className="bg-orange-600 text-white font-bold py-3 px-6 rounded-xl shadow-md transform hover:scale-105 transition-all duration-300 ease-out hover:bg-orange-700"
-        >
-          My Student Demo
->>>>>>> 202a842e5ea0e4cea0d225f75a2b5e56125dfb7d
+          Demos ({demoCount}) {/* Updated button to display demo count */}
         </button>
         <button
           onClick={handleLogout}

@@ -7,10 +7,7 @@ const AdmissionForm = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-<<<<<<< HEAD
-=======
   const [showSuccessModal, setShowSuccessModal] = useState(false); // State to control the success modal
->>>>>>> 202a842e5ea0e4cea0d225f75a2b5e56125dfb7d
   const [dob, setDob] = useState('');
   const [formData, setFormData] = useState({
     serialNumber: '',
@@ -56,18 +53,12 @@ const AdmissionForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage('');
-<<<<<<< HEAD
     setSuccessMessage('');
-=======
->>>>>>> 202a842e5ea0e4cea0d225f75a2b5e56125dfb7d
 
     if (!validateForm()) return;
 
     const dob = formData.dob;
-<<<<<<< HEAD
 
-=======
->>>>>>> 202a842e5ea0e4cea0d225f75a2b5e56125dfb7d
     if (!dob) {
       setErrorMessage('Date of Birth is required.');
       return;
@@ -114,17 +105,9 @@ const AdmissionForm = () => {
         paymentDate: formattedPaymentDate,
       });
 
-<<<<<<< HEAD
-      setSuccessMessage('Form submitted successfully!');
-      setTimeout(() => {
-        setSuccessMessage('');
-        navigate('/salesDashboard');
-      }, 3000);
-      
-=======
       // Show success modal when the submission is successful
+      setSuccessMessage('Form submitted successfully!');
       setShowSuccessModal(true);
->>>>>>> 202a842e5ea0e4cea0d225f75a2b5e56125dfb7d
     } catch (error) {
       setErrorMessage('Failed to submit the form. Please try again.');
     }
@@ -205,12 +188,30 @@ const AdmissionForm = () => {
           {errorMessage}
         </div>
       )}
-<<<<<<< HEAD
       {successMessage && (
-        <div className="bg-green-500 text-white p-4 rounded mb-4 animate-spin">
+        <div className="bg-green-500 text-white p-4 rounded mb-4">
           <span className="block text-center">{successMessage}</span>
         </div>
       )}
+
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-8 rounded-lg shadow-lg">
+            <h2 className="text-xl font-bold mb-4">Admission Successful!</h2>
+            <button
+              onClick={() => {
+                setShowSuccessModal(false);
+                navigate('/salesDashboard');
+              }}
+              className="bg-blue-500 text-white py-2 px-4 rounded"
+            >
+              Go to Sales Dashboard
+            </button>
+          </div>
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} className="max-w-2xl mx-auto p-4 space-y-4">
         <button
           onClick={() => navigate('/salesDashboard')}
@@ -219,7 +220,8 @@ const AdmissionForm = () => {
           Back
         </button>
         <h2 className="text-2xl font-bold mb-4">Admission Form</h2>
-        
+
+        {/* Form Fields */}
         {/* Serial Number */}
         <div>
           <label className="block mb-1">Serial Number:</label>
@@ -274,87 +276,6 @@ const AdmissionForm = () => {
 
         {/* Date of Birth */}
         <div>
-=======
-
-      {/* Success Modal */}
-      {showSuccessModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-8 rounded-lg shadow-lg">
-            <h2 className="text-xl font-bold mb-4">Admission Successful!</h2>
-            <button
-              onClick={() => {
-                setShowSuccessModal(false);
-                navigate('/salesDashboard');
-              }}
-              className="bg-blue-500 text-white py-2 px-4 rounded"
-            >
-              Go to Sales Dashboard
-            </button>
-          </div>
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit} className="max-w-2xl mx-auto p-4 space-y-4">
-        <h2 className="text-2xl font-bold mb-4">Admission Form</h2>
-        <button
-        onClick={() => navigate('/salesDashboard')}
-        className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 mb-4"
-      >
-        Back
-      </button>
-    
-      <h2 className="text-2xl font-bold mb-4">Admission Form</h2>
-      {/* Serial Number */}
-      <div>
-        <label className="block mb-1">Serial Number:</label>
-        <input
-          type="text"
-          name="serialNumber"
-          value={formData.serialNumber}
-          onChange={handleChange}
-          required
-          className="w-full border rounded p-2"
-        />
-      </div>
-      {/* Full Name */}
-      <div>
-        <label className="block mb-1">Full Name:</label>
-        <input
-          type="text"
-          name="fullName"
-          value={formData.fullName}
-          onChange={handleChange}
-          required
-          className="w-full border rounded p-2"
-        />
-      </div>
-      {/* Father Name */}
-      <div>
-        <label className="block mb-1">Father Name:</label>
-        <input
-          type="text"
-          name="fatherName"
-          value={formData.fatherName}
-          onChange={handleChange}
-          required
-          className="w-full border rounded p-2"
-        />
-      </div>
-      {/* Mother Name */}
-      <div>
-        <label className="block mb-1">Mother Name:</label>
-        <input
-          type="text"
-          name="motherName"
-          value={formData.motherName}
-          onChange={handleChange}
-          required
-          className="w-full border rounded p-2"
-        />
-      </div>
-      {/* Date of Birth */}
-      <div>
->>>>>>> 202a842e5ea0e4cea0d225f75a2b5e56125dfb7d
           <label className="block mb-1">Date of Birth:</label>
           <input
             type="date"
@@ -373,7 +294,7 @@ const AdmissionForm = () => {
         <div>
           <label className="block mb-1">Mobile Number:</label>
           <input
-            type="tel"
+            type="text"
             name="mobileNumber"
             value={formData.mobileNumber}
             onChange={handleChange}
@@ -381,7 +302,6 @@ const AdmissionForm = () => {
             className="w-full border rounded p-2"
           />
         </div>
-<<<<<<< HEAD
 
         {/* Email */}
         <div>
@@ -417,6 +337,7 @@ const AdmissionForm = () => {
             name="college"
             value={formData.college}
             onChange={handleChange}
+            required
             className="w-full border rounded p-2"
           />
         </div>
@@ -429,6 +350,7 @@ const AdmissionForm = () => {
             name="occupation"
             value={formData.occupation}
             onChange={handleChange}
+            required
             className="w-full border rounded p-2"
           />
         </div>
@@ -436,16 +358,14 @@ const AdmissionForm = () => {
         {/* Status */}
         <div>
           <label className="block mb-1">Status:</label>
-          <select
+          <input
+            type="text"
             name="status"
             value={formData.status}
             onChange={handleChange}
+            required
             className="w-full border rounded p-2"
-          >
-            <option value="">Select Status</option>
-            <option value="Active">Active</option>
-            <option value="Inactive">Inactive</option>
-          </select>
+          />
         </div>
 
         {/* Gender */}
@@ -468,7 +388,8 @@ const AdmissionForm = () => {
         {/* Present Address */}
         <div>
           <label className="block mb-1">Present Address:</label>
-          <textarea
+          <input
+            type="text"
             name="presentAddress"
             value={formData.presentAddress}
             onChange={handleChange}
@@ -480,7 +401,8 @@ const AdmissionForm = () => {
         {/* Permanent Address */}
         <div>
           <label className="block mb-1">Permanent Address:</label>
-          <textarea
+          <input
+            type="text"
             name="permanentAddress"
             value={formData.permanentAddress}
             onChange={handleChange}
@@ -490,50 +412,52 @@ const AdmissionForm = () => {
         </div>
 
         {/* Emergency Contact */}
-        <h3 className="text-lg font-semibold mt-4">Emergency Contact</h3>
         <div>
-          <label className="block mb-1">Name:</label>
-          <input
-            type="text"
-            name="emergencyContact.name"
-            value={formData.emergencyContact.name}
-            onChange={handleChange}
-            className="w-full border rounded p-2"
-          />
-        </div>
-
-        <div>
-          <label className="block mb-1">Mobile Number:</label>
-          <input
-            type="tel"
-            name="emergencyContact.mobileNumber"
-            value={formData.emergencyContact.mobileNumber}
-            onChange={handleChange}
-            className="w-full border rounded p-2"
-          />
-        </div>
-
-        <div>
-          <label className="block mb-1">Relation:</label>
-          <input
-            type="text"
-            name="emergencyContact.relation"
-            value={formData.emergencyContact.relation}
-            onChange={handleChange}
-            className="w-full border rounded p-2"
-          />
-        </div>
-
-        {/* Father's Mobile Number */}
-        <div>
-          <label className="block mb-1">Father's Mobile Number:</label>
-          <input
-            type="tel"
-            name="emergencyContact.fatherNumber"
-            value={formData.emergencyContact.fatherNumber}
-            onChange={handleChange}
-            className="w-full border rounded p-2"
-          />
+          <h3 className="text-lg font-semibold mb-2">Emergency Contact</h3>
+          <div>
+            <label className="block mb-1">Name:</label>
+            <input
+              type="text"
+              name="emergencyContact.name"
+              value={formData.emergencyContact.name}
+              onChange={handleChange}
+              required
+              className="w-full border rounded p-2"
+            />
+          </div>
+          <div>
+            <label className="block mb-1">Mobile Number:</label>
+            <input
+              type="text"
+              name="emergencyContact.mobileNumber"
+              value={formData.emergencyContact.mobileNumber}
+              onChange={handleChange}
+              required
+              className="w-full border rounded p-2"
+            />
+          </div>
+          <div>
+            <label className="block mb-1">Relation:</label>
+            <input
+              type="text"
+              name="emergencyContact.relation"
+              value={formData.emergencyContact.relation}
+              onChange={handleChange}
+              required
+              className="w-full border rounded p-2"
+            />
+          </div>
+          <div>
+            <label className="block mb-1">Father Number:</label>
+            <input
+              type="text"
+              name="emergencyContact.fatherNumber"
+              value={formData.emergencyContact.fatherNumber}
+              onChange={handleChange}
+              required
+              className="w-full border rounded p-2"
+            />
+          </div>
         </div>
 
         {/* Course Name */}
@@ -553,7 +477,7 @@ const AdmissionForm = () => {
         <div>
           <label className="block mb-1">Total Fee:</label>
           <input
-            type="number"
+            type="text"
             name="totalFee"
             value={formData.totalFee}
             onChange={handleChange}
@@ -566,7 +490,7 @@ const AdmissionForm = () => {
         <div>
           <label className="block mb-1">Registration Fee:</label>
           <input
-            type="number"
+            type="text"
             name="registrationFee"
             value={formData.registrationFee}
             onChange={handleChange}
@@ -613,8 +537,8 @@ const AdmissionForm = () => {
             className="w-full border rounded p-2"
           >
             <option value="Cash">Cash</option>
-            <option value="Cheque">Cheque</option>
-            <option value="Online">Online</option>
+            <option value="Credit Card">Credit Card</option>
+            <option value="Debit Card">Debit Card</option>
           </select>
         </div>
 
@@ -626,6 +550,7 @@ const AdmissionForm = () => {
             name="startDate"
             value={formData.startDate}
             onChange={handleChange}
+            required
             className="w-full border rounded p-2"
           />
         </div>
@@ -634,7 +559,7 @@ const AdmissionForm = () => {
         <div>
           <label className="block mb-1">Installments:</label>
           <input
-            type="number"
+            type="text"
             name="installments"
             value={formData.installments}
             onChange={handleChange}
@@ -646,10 +571,11 @@ const AdmissionForm = () => {
         <div>
           <label className="block mb-1">Payment Received:</label>
           <input
-            type="number"
+            type="text"
             name="paymentReceived"
             value={formData.paymentReceived}
             onChange={handleChange}
+            required
             className="w-full border rounded p-2"
           />
         </div>
@@ -662,96 +588,51 @@ const AdmissionForm = () => {
             name="paymentDate"
             value={formData.paymentDate}
             onChange={handleChange}
+            required
             className="w-full border rounded p-2"
           />
         </div>
 
-        {/* Passport Photo */}
+        {/* Upload Aadhaar Card */}
         <div>
-          <label className="block mb-1">Passport Photo:</label>
-          <input
-            type="file"
-            name="passportPhoto"
-            onChange={handleChange}
-            accept="image/*"
-            className="w-full border rounded p-2"
-          />
-        </div>
-
-        {/* Aadhaar Card */}
-        <div>
-          <label className="block mb-1">Aadhaar Card:</label>
+          <label className="block mb-1">Upload Aadhaar Card:</label>
           <input
             type="file"
             name="aadhaarCard"
             onChange={handleChange}
             accept="image/*"
             className="w-full border rounded p-2"
+            required
           />
         </div>
 
-        {/* Documents Submitted */}
+        {/* Upload Passport Photo */}
         <div>
-          <label className="block mb-1">Documents Submitted:</label>
-          <div className="flex flex-col">
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                name="documentsSubmitted.aadhaar"
-                checked={formData.documentsSubmitted.aadhaar}
-                onChange={handleChange}
-                className="mr-2"
-              />
-              Aadhaar Card
-            </label>
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                name="documentsSubmitted.voterCard"
-                checked={formData.documentsSubmitted.voterCard}
-                onChange={handleChange}
-                className="mr-2"
-              />
-              Voter Card
-            </label>
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                name="documentsSubmitted.drivingLicense"
-                checked={formData.documentsSubmitted.drivingLicense}
-                onChange={handleChange}
-                className="mr-2"
-              />
-              Driving License
-            </label>
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                name="documentsSubmitted.other"
-                checked={formData.documentsSubmitted.other}
-                onChange={handleChange}
-                className="mr-2"
-              />
-              Other
-            </label>
-          </div>
+          <label className="block mb-1">Upload Passport Photo:</label>
+          <input
+            type="file"
+            name="passportPhoto"
+            onChange={handleChange}
+            accept="image/*"
+            className="w-full border rounded p-2"
+            required
+          />
         </div>
 
         {/* Submit Button */}
-        <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
+        <button
+          type="submit"
+          className="mt-4 bg-blue-500 text-white p-2 rounded"
+        >
           Submit
         </button>
-=======
-      </div>
-      {/* Submit Button */}
-      <button
-        type="submit"
-        className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-      >
-        Submit
-      </button>
->>>>>>> 202a842e5ea0e4cea0d225f75a2b5e56125dfb7d
       </form>
+
+      {isSuccess && (
+        <div className="mt-4 bg-green-100 text-green-700 p-2 rounded">
+          Form submitted successfully!
+        </div>
+      )}
     </div>
   );
 };

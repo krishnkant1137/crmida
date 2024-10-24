@@ -19,11 +19,7 @@ const AttendancePage = () => {
     const fetchBatches = async () => {
       try {
         setLoading(true);
-<<<<<<< HEAD
-        const response = await fetch("/api/attendance");
-=======
-        const response = await fetch("http://3.145.137.229:5000/api/attendance"); // Updated to match your route setup
->>>>>>> 202a842e5ea0e4cea0d225f75a2b5e56125dfb7d
+        const response = await fetch("http://3.145.137.229:5000/api/attendance");
         if (!response.ok) throw new Error("Failed to fetch batches");
         const data = await response.json();
         console.log('Fetched Batches:', data);
@@ -103,7 +99,7 @@ const AttendancePage = () => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-green-100 to-gray-300 min-h-screen p-6 mt-10"> {/* Added mt-10 for margin top */}
+    <div className="bg-gradient-to-br from-green-100 to-gray-300 min-h-screen p-6 mt-10">
       <h1 className="text-4xl font-bold mb-6 text-center text-gray-800 animate-pulse">
         Attendance
       </h1>
@@ -198,14 +194,14 @@ const AttendancePage = () => {
 
       {/* Success Message */}
       {showSuccess && (
-        <div className={`mt-4 p-4 bg-green-100 border border-green-300 rounded-md text-center transition-opacity duration-300 ease-in-out opacity-100`}>
+        <div className="mt-4 p-4 bg-green-100 border border-green-300 rounded-md text-center transition-opacity duration-300 ease-in-out opacity-100">
           {successMessage}
         </div>
       )}
 
       {/* Already Submitted Message */}
       {showAlreadySubmitted && (
-        <div className={`mt-4 p-4 bg-red-100 border border-red-300 rounded-md text-center transition-opacity duration-300 ease-in-out opacity-100`}>
+        <div className="mt-4 p-4 bg-red-100 border border-red-300 rounded-md text-center transition-opacity duration-300 ease-in-out opacity-100">
           Today's attendance has already been submitted!
         </div>
       )}
