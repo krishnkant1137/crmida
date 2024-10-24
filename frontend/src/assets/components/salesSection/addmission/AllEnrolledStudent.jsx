@@ -7,7 +7,7 @@ const AllEnrolledStudents = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('http://3.145.137.229:5000/api/enrolled-students')
+    axios.get('http://3.145.137.229/api/enrolled-students')
       .then(response => {
         setStudents(response.data);
       })
@@ -35,13 +35,12 @@ const AllEnrolledStudents = () => {
             <div key={index} className="bg-white p-6 rounded-xl shadow-lg transform transition duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-1">
               <div className="flex items-center space-x-4 mb-4">
                 <img 
-                  src={student.passportPhoto || 'https://via.placeholder.com/100'} // Display the profile photo or a placeholder if not available
+                  src={student.passportPhoto || 'https://via.placeholder.com/100'}
                   alt={`${student.fullName}'s profile`}
                   className="w-16 h-16 rounded-full object-cover"
                 />
                 <h2 className="text-2xl font-bold text-gray-800">{student.fullName}</h2>
               </div>
-              <p className="text-gray-600">Admission Date: <span className="font-medium">{new Date(student.admissionDate).toLocaleDateString()}</span></p>
               <p className="text-gray-600">Roll Number: <span className="font-medium">{student.rollNumber}</span></p>
               <p className="text-gray-600">Email: <span className="font-medium">{student.email}</span></p>
               <p className="text-gray-600">Phone: <span className="font-medium">{student.mobileNumber}</span></p>

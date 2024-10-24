@@ -19,11 +19,17 @@ const AttendancePage = () => {
     const fetchBatches = async () => {
       try {
         setLoading(true);
+<<<<<<< HEAD
         const response = await fetch("/api/attendance");
+=======
+        const response = await fetch("http://3.145.137.229:5000/api/attendance"); // Updated to match your route setup
+>>>>>>> 202a842e5ea0e4cea0d225f75a2b5e56125dfb7d
         if (!response.ok) throw new Error("Failed to fetch batches");
         const data = await response.json();
+        console.log('Fetched Batches:', data);
         setBatches(data);
       } catch (err) {
+        console.error(err.message);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -66,7 +72,7 @@ const AttendancePage = () => {
 
     try {
       setIsSubmitting(true);
-      const response = await fetch("/api/attendance/submit-attendance", {
+      const response = await fetch("http://3.145.137.229:5000/api/attendance/submit-attendance", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const router = express.Router();
 const EnrolledStudent = require('../models/Admission'); // Adjust the path as needed
 
@@ -8,16 +9,23 @@ router.get('/', async (req, res) => {
     const students = await EnrolledStudent.find(); // Fetch all enrolled students
     res.json(students);
   } catch (error) {
-    console.error('Error fetching enrolled students:', error);
+    console.error('Error fetching enrolled students:', error.message);
     res.status(500).json({ message: 'Error fetching enrolled students' });
   }
 });
 
 // GET a specific enrolled student by ID
 router.get('/:id', async (req, res) => {
+  const studentId = req.params.id;
+
+  // Check if the provided ID is a valid ObjectId
+  if (!mongoose.Types.ObjectId.isValid(studentId)) {
+    return res.status(400).json({ message: 'Invalid student ID' });
+  }
+
   try {
-    const studentId = req.params.id; // Get the student ID from the request parameters
-    const student = await EnrolledStudent.findById(studentId); // Fetch the student by ID
+    // Fetch only the specific fields required
+    const student = await EnrolledStudent.findById(studentId, 'fullName rollNumber mobileNumber courseName totalFee paymentReceived installments');
 
     if (!student) {
       return res.status(404).json({ message: 'Student not found' }); // Handle not found case
@@ -25,11 +33,9 @@ router.get('/:id', async (req, res) => {
 
     res.json(student); // Return the student's details
   } catch (error) {
-    console.error('Error fetching student:', error);
-    res.status(500).json({ message: 'Error fetching student' });
+    console.error('Error fetching student:', error.message); // Log the error message
+    res.status(500).json({ message: 'Error fetching student', error: error.message }); // Include the error message in the response
   }
 });
 
-// Remove payment update functionality from here
-
-module.exports = router;
+module.exports = router; 

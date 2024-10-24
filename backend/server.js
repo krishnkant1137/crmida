@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
 
 const enquiryRoutes = require('./routes/enquiry');
@@ -19,7 +19,6 @@ const HrLoginRoute = require('./routes/hrLogin');
 const adminLoginRoute = require('./routes/adminLogin');
 const hrStudentRoute = require('./routes/hrStudent');
 
-
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -29,10 +28,13 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
   allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
   credentials: true, // Allow cookies
-})); // Enable CORS
+}));
 app.use(express.json()); // For parsing application/json
 app.use(express.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
 app.use('/uploads', express.static('uploads')); // Serve uploaded files
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'build')));
 
 // Routes
 app.use('/api/enquiry', enquiryRoutes);
@@ -42,16 +44,16 @@ app.use('/api/sales', salesRoutes);
 app.use('/api/admissions', admissionRoutes);
 app.use('/api/enrolled-students', enrolledStudentsRoutes);
 app.use('/api/student-payments', studentPaymentsRoutes);
-app.use('/api/faculties', facultiesRoutes); // Ensure the correct route for faculties
+app.use('/api/faculties', facultiesRoutes);
 app.use('/api/batches', batchRoutes);
 app.use('/api/attendance', attendanceRoutes);
 app.use('/api/performance', performanceRoutes);
-app.use('/api/HR', HrLoginRoute)
-app.use('/api/admin', adminLoginRoute)
-app.use('/api/hrStudent', hrStudentRoute)
+app.use('/api/HR', HrLoginRoute);
+app.use('/api/admin', adminLoginRoute);
+app.use('/api/hrStudent', hrStudentRoute);
 
 // MongoDB connection
-mongoose.connect(process.env.MONGO_URI,)
+mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('MongoDB connected successfully');
   })
@@ -59,8 +61,10 @@ mongoose.connect(process.env.MONGO_URI,)
     console.error('MongoDB connection error:', err);
   });
 
-// Placeholder route
-app.get('/', (req, res) => res.send('API is running...'));
+// Catch-all route for client-side routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -69,7 +73,6 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-app.listen(5000, '0.0.0.0', () => {
-  console.log('Server running on port 5000');
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
 });
-

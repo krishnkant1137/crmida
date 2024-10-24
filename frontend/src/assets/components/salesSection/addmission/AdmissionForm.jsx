@@ -7,6 +7,10 @@ const AdmissionForm = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+<<<<<<< HEAD
+=======
+  const [showSuccessModal, setShowSuccessModal] = useState(false); // State to control the success modal
+>>>>>>> 202a842e5ea0e4cea0d225f75a2b5e56125dfb7d
   const [dob, setDob] = useState('');
   const [formData, setFormData] = useState({
     serialNumber: '',
@@ -52,14 +56,19 @@ const AdmissionForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage('');
+<<<<<<< HEAD
     setSuccessMessage('');
+=======
+>>>>>>> 202a842e5ea0e4cea0d225f75a2b5e56125dfb7d
 
     if (!validateForm()) return;
 
     const dob = formData.dob;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 202a842e5ea0e4cea0d225f75a2b5e56125dfb7d
     if (!dob) {
-      console.error('Date of Birth is required.');
       setErrorMessage('Date of Birth is required.');
       return;
     }
@@ -105,12 +114,17 @@ const AdmissionForm = () => {
         paymentDate: formattedPaymentDate,
       });
 
+<<<<<<< HEAD
       setSuccessMessage('Form submitted successfully!');
       setTimeout(() => {
         setSuccessMessage('');
         navigate('/salesDashboard');
       }, 3000);
       
+=======
+      // Show success modal when the submission is successful
+      setShowSuccessModal(true);
+>>>>>>> 202a842e5ea0e4cea0d225f75a2b5e56125dfb7d
     } catch (error) {
       setErrorMessage('Failed to submit the form. Please try again.');
     }
@@ -191,6 +205,7 @@ const AdmissionForm = () => {
           {errorMessage}
         </div>
       )}
+<<<<<<< HEAD
       {successMessage && (
         <div className="bg-green-500 text-white p-4 rounded mb-4 animate-spin">
           <span className="block text-center">{successMessage}</span>
@@ -259,6 +274,87 @@ const AdmissionForm = () => {
 
         {/* Date of Birth */}
         <div>
+=======
+
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-8 rounded-lg shadow-lg">
+            <h2 className="text-xl font-bold mb-4">Admission Successful!</h2>
+            <button
+              onClick={() => {
+                setShowSuccessModal(false);
+                navigate('/salesDashboard');
+              }}
+              className="bg-blue-500 text-white py-2 px-4 rounded"
+            >
+              Go to Sales Dashboard
+            </button>
+          </div>
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="max-w-2xl mx-auto p-4 space-y-4">
+        <h2 className="text-2xl font-bold mb-4">Admission Form</h2>
+        <button
+        onClick={() => navigate('/salesDashboard')}
+        className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 mb-4"
+      >
+        Back
+      </button>
+    
+      <h2 className="text-2xl font-bold mb-4">Admission Form</h2>
+      {/* Serial Number */}
+      <div>
+        <label className="block mb-1">Serial Number:</label>
+        <input
+          type="text"
+          name="serialNumber"
+          value={formData.serialNumber}
+          onChange={handleChange}
+          required
+          className="w-full border rounded p-2"
+        />
+      </div>
+      {/* Full Name */}
+      <div>
+        <label className="block mb-1">Full Name:</label>
+        <input
+          type="text"
+          name="fullName"
+          value={formData.fullName}
+          onChange={handleChange}
+          required
+          className="w-full border rounded p-2"
+        />
+      </div>
+      {/* Father Name */}
+      <div>
+        <label className="block mb-1">Father Name:</label>
+        <input
+          type="text"
+          name="fatherName"
+          value={formData.fatherName}
+          onChange={handleChange}
+          required
+          className="w-full border rounded p-2"
+        />
+      </div>
+      {/* Mother Name */}
+      <div>
+        <label className="block mb-1">Mother Name:</label>
+        <input
+          type="text"
+          name="motherName"
+          value={formData.motherName}
+          onChange={handleChange}
+          required
+          className="w-full border rounded p-2"
+        />
+      </div>
+      {/* Date of Birth */}
+      <div>
+>>>>>>> 202a842e5ea0e4cea0d225f75a2b5e56125dfb7d
           <label className="block mb-1">Date of Birth:</label>
           <input
             type="date"
@@ -285,6 +381,7 @@ const AdmissionForm = () => {
             className="w-full border rounded p-2"
           />
         </div>
+<<<<<<< HEAD
 
         {/* Email */}
         <div>
@@ -644,6 +741,16 @@ const AdmissionForm = () => {
         <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
           Submit
         </button>
+=======
+      </div>
+      {/* Submit Button */}
+      <button
+        type="submit"
+        className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+      >
+        Submit
+      </button>
+>>>>>>> 202a842e5ea0e4cea0d225f75a2b5e56125dfb7d
       </form>
     </div>
   );

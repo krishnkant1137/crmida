@@ -11,7 +11,7 @@ const StudentStatus = ({ student, onClose }) => {
   // Fetch companies for the student from the backend
   const fetchCompanies = async () => {
     try {
-      const response = await axios.get(`/api/student/${student.id}/companies`); // Adjust endpoint as needed
+      const response = await axios.get(`http://3.145.137.229/5000/api/student/${student.id}/companies`); // Adjust endpoint as needed
       setCompanies(response.data);
     } catch (error) {
       console.error('Error fetching companies:', error);

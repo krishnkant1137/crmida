@@ -26,7 +26,7 @@ const HRDashboard = () => {
   // Function to fetch students from the API
   const fetchStudents = async () => {
     try {
-      const response = await axios.get('/api/hrStudent'); // Use the correct endpoint
+      const response = await axios.get('http://3.145.137.229:5000/api/hrStudent'); // Use the correct endpoint
       setStudents(response.data);
     } catch (error) {
       console.error('Error fetching students:', error);
@@ -36,7 +36,7 @@ const HRDashboard = () => {
   // Function to fetch courses from the API
   const fetchCourses = async () => {
     try {
-      const response = await axios.get('/api/courses'); // Replace with your actual endpoint
+      const response = await axios.get('http://3.145.137.229:5000/api/courses'); // Replace with your actual endpoint
       setCourses(response.data);
     } catch (error) {
       console.error('Error fetching courses:', error);

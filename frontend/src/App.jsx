@@ -20,6 +20,7 @@ import PerformancePage from "./assets/components/facultySection/performance/Perf
 import FacultyLogin from "./assets/components/facultySection/FacultiesLogin";
 import FacultyDashboard from "./assets/components/facultySection/FacultyDashboard";
 import ResourceSharing from "./assets/components/facultySection/ResourceSharing";
+import DemosReceived from "./assets/components/facultySection/DemoReceived";
 import HRDashboard from "./assets/components/HRSection/HRDashboard";
 import HRLogin from "./assets/components/HRSection/HRLogin";
 import StudentStatus from "./assets/components/HRSection/StudentStatus";
@@ -35,7 +36,11 @@ function App() {
     <>
       <Router>
         <Navbar />
+<<<<<<< HEAD
         <div
+=======
+        {/* <div
+>>>>>>> 202a842e5ea0e4cea0d225f75a2b5e56125dfb7d
           className="min-h-screen bg-cover bg-center p-6"
           style={{
             backgroundImage: "url('https://res.cloudinary.com/dpwcvgpt3/image/upload/v1729494553/blauc6qmmxwxaqdgdago.jpg')",
@@ -43,7 +48,7 @@ function App() {
             backgroundPosition: "center", // Center the background image
             backgroundRepeat: "no-repeat", // Prevent the image from repeating
           }}
-        >
+        > */}
           <Routes>
             <Route path="/sales/login" element={<SalesLogin />} />
             <Route path="/faculties/login" element={<FacultyLogin />} />
@@ -95,7 +100,7 @@ function App() {
             <Route path="/sales/all-demo" element={<AllDemo />} />
             <Route path="/sales/enrolled-students" element={<EnrolledStudent />} />
             <Route path="/sales/all-enrolled-students" element={<AllEnrolledStudents />} />
-            <Route path="/students/:studentId" element={<StudentProfile />} />
+            <Route path="/students/:id" element={<StudentProfile />} />
 
             {/* Faculties section routes */}
             <Route path="/facultiesDashboard" element={<FacultyDashboard />} />
@@ -117,7 +122,7 @@ function App() {
 
             <Route path="/unauthorized" element={<Unauthorized />} />
           </Routes>
-        </div>
+        {/* </div> */}
       </Router>
     </>
   );

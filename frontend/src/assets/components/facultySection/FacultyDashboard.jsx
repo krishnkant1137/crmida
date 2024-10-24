@@ -30,12 +30,16 @@ const FacultyDashboard = () => {
     navigate(`/facultiesDashboard/performance`); 
   };
 
-  const handleProfileClick = () => {
-    alert("Profile section is under development.");
-  };
+  // const handleProfileClick = () => {
+  //   alert("Profile section is under development.");
+  // };
 
   const handleResourceSharingClick = () => {
     navigate("/facultiesDashboard/resourceSharing"); 
+  };
+
+  const handleMyStudentDemoClick = () => {
+    navigate("/facultiesDashboard/demosReceived"); 
   };
 
   const handleLogout = () => {
@@ -72,12 +76,12 @@ const FacultyDashboard = () => {
         >
           Performance
         </button>
-        <button
+        {/* <button
           onClick={handleProfileClick}
           className="bg-purple-600 text-white font-bold py-3 px-6 rounded-xl shadow-md transform hover:scale-105 transition-all duration-300 ease-out hover:bg-purple-700 w-48 h-16"
         >
           Profile
-        </button>
+        </button> */}
         <button
           onClick={handleResourceSharingClick}
           className="bg-teal-600 text-white font-bold py-3 px-6 rounded-xl shadow-md transform hover:scale-105 transition-all duration-300 ease-out hover:bg-teal-700 w-48 h-16"
@@ -85,10 +89,17 @@ const FacultyDashboard = () => {
           Resource Sharing
         </button>
         <button
+<<<<<<< HEAD
           onClick={handleDemosClick}
           className="bg-indigo-600 text-white font-bold py-3 px-6 rounded-xl shadow-md transform hover:scale-105 transition-all duration-300 ease-out hover:bg-indigo-700 w-48 h-16"
         >
           Demos ({demoCount})
+=======
+          onClick={handleMyStudentDemoClick}
+          className="bg-orange-600 text-white font-bold py-3 px-6 rounded-xl shadow-md transform hover:scale-105 transition-all duration-300 ease-out hover:bg-orange-700"
+        >
+          My Student Demo
+>>>>>>> 202a842e5ea0e4cea0d225f75a2b5e56125dfb7d
         </button>
         <button
           onClick={handleLogout}
