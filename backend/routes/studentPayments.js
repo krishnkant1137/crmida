@@ -3,9 +3,9 @@ const router = express.Router();
 const StudentPayment = require('../models/StudentPayment');
 const Admission = require('../models/Admission');
 
-// Add payment route
+// Add payment and update passport photo route
 router.put('/:id', async (req, res) => {
-    const { paymentReceived } = req.body;
+    const { paymentReceived, passportPhoto } = req.body; // Include passportPhoto in request body
 
     try {
         // Parse paymentReceived to ensure it's a number
@@ -38,6 +38,12 @@ router.put('/:id', async (req, res) => {
         }
 
         admission.paymentReceived += totalPaymentToBeRecorded;
+
+        // Update the passport photo if provided
+        if (passportPhoto) {
+            admission.passportPhoto = passportPhoto; // Update passport photo
+        }
+
         await admission.save();
 
         // Create a new payment entry in StudentPayment
@@ -51,7 +57,7 @@ router.put('/:id', async (req, res) => {
 
         // Update Installment Status based on the cumulative payments
         const currentTotalPayments = admission.paymentReceived;
-        
+
         // Initialize installmentsStatus if it's not already an array
         if (!Array.isArray(admission.installmentsStatus)) {
             admission.installmentsStatus = Array(admission.installments).fill('Pending');

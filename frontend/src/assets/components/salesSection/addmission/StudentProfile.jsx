@@ -16,7 +16,7 @@ const StudentPayment = () => {
   useEffect(() => {
     const fetchStudentDetails = async () => {
       try {
-        const response = await axios.get(`http://l3.145.137.229:5000/api/enrolled-students/${id}`);
+        const response = await axios.get(`http://3.145.137.229:5000/api/enrolled-students/${id}`);
         const studentData = response.data;
         setStudent(studentData);
 
@@ -36,46 +36,46 @@ const StudentPayment = () => {
 
   const handlePayment = async () => {
     if (!paymentAmount || isNaN(paymentAmount) || Number(paymentAmount) <= 0) {
-        alert('Please enter a valid payment amount.');
-        return;
+      alert('Please enter a valid payment amount.');
+      return;
     }
 
     try {
-        const remainingFee = student.totalFee - student.paymentReceived;
+      const remainingFee = student.totalFee - student.paymentReceived;
 
-        // Adjust the payment amount to not exceed the remaining fee
-        const validPaymentAmount = Math.min(Number(paymentAmount), remainingFee);
+      // Adjust the payment amount to not exceed the remaining fee
+      const validPaymentAmount = Math.min(Number(paymentAmount), remainingFee);
 
-        if (validPaymentAmount <= 0) {
-            alert('No valid payment can be made.');
-            return;
-        }
+      if (validPaymentAmount <= 0) {
+        alert('No valid payment can be made.');
+        return;
+      }
 
-        setLoading(true);
+      setLoading(true);
 
-        const response = await axios.put(`http://3.145.137.229:5000/api/student-payments/${id}`, {
-            paymentReceived: validPaymentAmount,
-        });
+      const response = await axios.put(`http://3.145.137.229:5000/api/student-payments/${id}`, {
+        paymentReceived: validPaymentAmount,
+      });
 
-        if (response.status === 200) {
-            const updatedStudent = response.data.admission;
-            setStudent(updatedStudent);
-            setInstallmentsStatus(updateInstallmentStatus(updatedStudent.paymentReceived, installmentAmount, updatedStudent.installments));
-            setPaymentAmount('');
-            setSuccessMessage('Payment updated successfully!');
+      if (response.status === 200) {
+        const updatedStudent = response.data.admission;
+        setStudent(updatedStudent);
+        setInstallmentsStatus(updateInstallmentStatus(updatedStudent.paymentReceived, installmentAmount, updatedStudent.installments));
+        setPaymentAmount('');
+        setSuccessMessage('Payment updated successfully!');
 
-            // Clear the success message after a few seconds
-            setTimeout(() => setSuccessMessage(''), 3000);
-        } else {
-            throw new Error('Failed to update payment.');
-        }
+        // Clear the success message after a few seconds
+        setTimeout(() => setSuccessMessage(''), 3000);
+      } else {
+        throw new Error('Failed to update payment.');
+      }
     } catch (err) {
-        console.error('Error updating payment:', err.message);
-        setError('Failed to update payment. Please check if the student exists and try again.');
+      console.error('Error updating payment:', err.message);
+      setError('Failed to update payment. Please check if the student exists and try again.');
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
-};
+  };
 
   const updateInstallmentStatus = (totalPaymentReceived, installmentAmount, totalInstallments) => {
     const updatedStatus = [];
@@ -111,36 +111,40 @@ const StudentPayment = () => {
   }
 
   return (
-    <div className="container mx-auto p-6 bg-gradient-to-r from-white to-blue-50 rounded-md shadow-lg mt-10">
+    <div className="container mx-auto p-8 bg-gradient-to-r from-blue-50 to-white rounded-lg shadow-lg mt-10">
       <button
         onClick={() => navigate('/sales/all-enrolled-students')}
         className="bg-blue-600 text-white py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105 mb-6"
       >
         Back
       </button>
-      <h1 className="text-3xl font-bold mb-6">Student Profile</h1>
-      <div className="bg-white p-6 rounded-md shadow-lg">
-        <img src={student.profilePhoto} alt={`${student.fullName}'s Profile`} className="w-32 h-32 rounded-full mb-4" />
-        <div className="mb-3"><strong>Full Name:</strong> {student.fullName}</div>
-        <div className="mb-3"><strong>Roll Number:</strong> {student.rollNumber}</div>
-        <div className="mb-3"><strong>Mobile Number:</strong> {student.mobileNumber}</div>
-        <div className="mb-3"><strong>Course Name:</strong> {student.courseName}</div>
-        <div className="mb-3"><strong>Total Fee:</strong> ₹{student.totalFee}</div>
-        <div className="mb-3"><strong>Payment Received:</strong> ₹{student.paymentReceived}</div>
-        <div className="mb-3"><strong>Remaining Fee:</strong> ₹{remainingFee}</div>
-        <div className="mb-3"><strong>Installments:</strong> {student.installments}</div>
-        <div className="mb-3"><strong>Installment Amount:</strong> ₹{installmentAmount}</div>
-        <div className="mb-3">
+      <h1 className="text-4xl font-bold text-center mb-6 text-blue-800">Student Profile</h1>
+      <div className="bg-white p-6 rounded-lg shadow-lg">
+        <img 
+          src={student.passportPhoto || 'https://via.placeholder.com/250'} 
+          alt={`${student.fullName}'s Profile`} 
+          className="w-32 h-32 rounded-full mb-4 mx-auto border-4 border-blue-500 object-cover" 
+        />
+        <div className="text-lg font-semibold text-blue-600 mb-2">{student.fullName}</div>
+        <div className="mb-2"><strong>Roll Number:</strong> {student.rollNumber}</div>
+        <div className="mb-2"><strong>Mobile Number:</strong> {student.mobileNumber}</div>
+        <div className="mb-2"><strong>Course Name:</strong> {student.courseName}</div>
+        <div className="mb-2"><strong>Total Fee:</strong> ₹{student.totalFee}</div>
+        <div className="mb-2"><strong>Payment Received:</strong> ₹{student.paymentReceived}</div>
+        <div className="mb-2"><strong>Remaining Fee:</strong> ₹{remainingFee}</div>
+        <div className="mb-2"><strong>Installments:</strong> {student.installments}</div>
+        <div className="mb-4"><strong>Installment Amount:</strong> ₹{installmentAmount}</div>
+        <div className="mb-4">
           <strong>Due Dates:</strong>
-          <ul>
+          <ul className="list-disc pl-5">
             {dueDates.map((date, index) => (
               <li key={index}>Installment {index + 1}: {date}</li>
             ))}
           </ul>
         </div>
-        <div className="mb-3">
+        <div className="mb-4">
           <strong>Installment Status:</strong>
-          <ul>
+          <ul className="list-disc pl-5">
             {installmentsStatus.map((status, index) => (
               <li key={index}>Installment {index + 1}: {status}</li>
             ))}
@@ -149,20 +153,20 @@ const StudentPayment = () => {
       </div>
 
       {allInstallmentsCompleted ? (
-        <div className="mt-4 text-green-600">All installments are completed!</div>
+        <div className="mt-4 text-green-600 text-center font-bold">All installments are completed!</div>
       ) : (
-        <div className="mt-6">
+        <div className="mt-6 flex flex-col items-center">
           <input
             type="number"
             value={paymentAmount}
             onChange={(e) => setPaymentAmount(e.target.value)}
             placeholder="Enter Payment Amount"
-            className="border rounded-md p-2 mr-2"
+            className="border border-gray-300 rounded-md p-2 mb-4 w-full max-w-xs"
           />
           <button
             onClick={handlePayment}
             disabled={loading}
-            className="bg-green-600 text-white py-2 px-4 rounded-md shadow-md hover:bg-green-700 transition duration-300 ease-in-out transform hover:scale-105"
+            className={`bg-green-600 text-white py-2 px-4 rounded-md shadow-md hover:bg-green-700 transition duration-300 ease-in-out transform hover:scale-105 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             {loading ? 'Processing...' : 'Add Payment'}
           </button>
