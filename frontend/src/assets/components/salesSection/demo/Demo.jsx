@@ -47,6 +47,14 @@ const Demo = () => {
 
   return (
     <div className="mt-8 pt-20">
+    <div className="flex justify-start mt-4">
+        <button
+          onClick={() => navigate('/salesDashboard')} // Change to your desired route
+          className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition duration-200"
+        >
+          Go Back
+        </button>
+      </div>
       <h1 className="text-center text-3xl font-bold text-gray-800">Demo Section</h1>
       <form onSubmit={handleSubmit} className="mt-6">
         <div className="flex flex-col items-center">
@@ -128,15 +136,6 @@ const Demo = () => {
           </button>
         </div>
       </form>
-      {/* Navigation Button */}
-      <div className="flex justify-center mt-4">
-        <button
-          onClick={() => navigate('/salesDashboard')} // Change to your desired route
-          className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition duration-200"
-        >
-          Go Back
-        </button>
-      </div>
     </div>
   );
 };
