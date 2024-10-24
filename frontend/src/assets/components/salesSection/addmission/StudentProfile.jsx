@@ -3,28 +3,27 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 
 const StudentPayment = () => {
-  const { id } = useParams(); // Extract the student ID from the URL
+  const { id } = useParams();
   const [student, setStudent] = useState(null);
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [paymentAmount, setPaymentAmount] = useState('');
-  const [loading, setLoading] = useState(false); // State to manage loading
-  const [installmentAmount, setInstallmentAmount] = useState(null); // State for fixed installment amount
-  const [installmentsStatus, setInstallmentsStatus] = useState([]); // State for installment status
+  const [loading, setLoading] = useState(false);
+  const [installmentAmount, setInstallmentAmount] = useState(0);
+  const [installmentsStatus, setInstallmentsStatus] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchStudentDetails = async () => {
       try {
-        const response = await axios.get(`http://3.145.137.229:5000/api/enrolled-students/${id}`);
+        const response = await axios.get(`http://l3.145.137.229:5000/api/enrolled-students/${id}`);
         const studentData = response.data;
         setStudent(studentData);
 
-        // Calculate the fixed installment amount based on the remaining fee
         const remainingFee = studentData.totalFee - studentData.paymentReceived;
         const fixedInstallmentAmount = (remainingFee / studentData.installments).toFixed(2);
         setInstallmentAmount(fixedInstallmentAmount);
 
-        // Initialize the installment status
         setInstallmentsStatus(updateInstallmentStatus(studentData.paymentReceived, fixedInstallmentAmount, studentData.installments));
       } catch (err) {
         console.error('Error fetching student details:', err.message);
@@ -37,51 +36,47 @@ const StudentPayment = () => {
 
   const handlePayment = async () => {
     if (!paymentAmount || isNaN(paymentAmount) || Number(paymentAmount) <= 0) {
-      alert('Please enter a valid payment amount.');
-      return;
+        alert('Please enter a valid payment amount.');
+        return;
     }
 
     try {
-      const remainingFee = student.totalFee - student.paymentReceived;
+        const remainingFee = student.totalFee - student.paymentReceived;
 
-      // Ensure payment does not exceed remaining fee
-      if (Number(paymentAmount) > remainingFee) {
-        alert('Payment amount cannot exceed the remaining fee.');
-        return;
-      }
+        // Adjust the payment amount to not exceed the remaining fee
+        const validPaymentAmount = Math.min(Number(paymentAmount), remainingFee);
 
-      const updatedPaymentReceived = Number(paymentAmount) + student.paymentReceived;
+        if (validPaymentAmount <= 0) {
+            alert('No valid payment can be made.');
+            return;
+        }
 
-      // Start loading
-      setLoading(true);
+        setLoading(true);
 
-      // Update payment on the server
-      const response = await axios.put(`http://3.145.137.229:5000/api/student-payments/${id}`, {
-        paymentReceived: updatedPaymentReceived,
-      });
+        const response = await axios.put(`http://3.145.137.229:5000/api/student-payments/${id}`, {
+            paymentReceived: validPaymentAmount,
+        });
 
-      if (response.status === 200) {
-        const updatedStudent = response.data.admission;
+        if (response.status === 200) {
+            const updatedStudent = response.data.admission;
+            setStudent(updatedStudent);
+            setInstallmentsStatus(updateInstallmentStatus(updatedStudent.paymentReceived, installmentAmount, updatedStudent.installments));
+            setPaymentAmount('');
+            setSuccessMessage('Payment updated successfully!');
 
-        // Update the state with the new data from the server
-        setStudent(updatedStudent);
-        setInstallmentsStatus(updateInstallmentStatus(updatedStudent.paymentReceived, installmentAmount, updatedStudent.installments));
-
-        // Reset payment amount
-        setPaymentAmount('');
-      } else {
-        throw new Error('Failed to update payment.');
-      }
+            // Clear the success message after a few seconds
+            setTimeout(() => setSuccessMessage(''), 3000);
+        } else {
+            throw new Error('Failed to update payment.');
+        }
     } catch (err) {
-      console.error('Error updating payment:', err.message);
-      setError('Failed to update payment. Please check if the student exists and try again.');
+        console.error('Error updating payment:', err.message);
+        setError('Failed to update payment. Please check if the student exists and try again.');
     } finally {
-      // Stop loading
-      setLoading(false);
+        setLoading(false);
     }
-  };
+};
 
-  // Helper function to update installment status
   const updateInstallmentStatus = (totalPaymentReceived, installmentAmount, totalInstallments) => {
     const updatedStatus = [];
     let remainingPayment = totalPaymentReceived;
@@ -125,6 +120,7 @@ const StudentPayment = () => {
       </button>
       <h1 className="text-3xl font-bold mb-6">Student Profile</h1>
       <div className="bg-white p-6 rounded-md shadow-lg">
+        <img src={student.profilePhoto} alt={`${student.fullName}'s Profile`} className="w-32 h-32 rounded-full mb-4" />
         <div className="mb-3"><strong>Full Name:</strong> {student.fullName}</div>
         <div className="mb-3"><strong>Roll Number:</strong> {student.rollNumber}</div>
         <div className="mb-3"><strong>Mobile Number:</strong> {student.mobileNumber}</div>
@@ -142,37 +138,38 @@ const StudentPayment = () => {
             ))}
           </ul>
         </div>
-        {!allInstallmentsCompleted && (
-          <div className="mb-3">
-            <label htmlFor="payment" className="block mb-2 font-medium">Add Payment:</label>
-            <input
-              type="number"
-              id="payment"
-              value={paymentAmount}
-              onChange={(e) => setPaymentAmount(e.target.value)}
-              className="border rounded-md p-2 w-full"
-              placeholder="Enter payment amount"
-            />
-            <button
-              onClick={handlePayment}
-              className="mt-2 bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition duration-300 ease-in-out transform hover:scale-105"
-              disabled={loading} // Disable button while loading
-            >
-              {loading ? 'Processing...' : 'Add Payment'}
-            </button>
-          </div>
-        )}
-        <div className="mt-4">
-          <h2 className="text-xl font-semibold">Installment Status:</h2>
+        <div className="mb-3">
+          <strong>Installment Status:</strong>
           <ul>
             {installmentsStatus.map((status, index) => (
-              <li key={index} className={status === 'Completed' ? 'text-green-600' : 'text-red-600'}>
-                Installment {index + 1}: {status}
-              </li>
+              <li key={index}>Installment {index + 1}: {status}</li>
             ))}
           </ul>
         </div>
       </div>
+
+      {allInstallmentsCompleted ? (
+        <div className="mt-4 text-green-600">All installments are completed!</div>
+      ) : (
+        <div className="mt-6">
+          <input
+            type="number"
+            value={paymentAmount}
+            onChange={(e) => setPaymentAmount(e.target.value)}
+            placeholder="Enter Payment Amount"
+            className="border rounded-md p-2 mr-2"
+          />
+          <button
+            onClick={handlePayment}
+            disabled={loading}
+            className="bg-green-600 text-white py-2 px-4 rounded-md shadow-md hover:bg-green-700 transition duration-300 ease-in-out transform hover:scale-105"
+          >
+            {loading ? 'Processing...' : 'Add Payment'}
+          </button>
+        </div>
+      )}
+
+      {successMessage && <div className="text-green-500 text-center mt-4">{successMessage}</div>}
     </div>
   );
 };

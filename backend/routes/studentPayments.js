@@ -14,29 +14,44 @@ router.put('/:id', async (req, res) => {
             return res.status(400).json({ message: 'Invalid payment amount' });
         }
 
-        // Find the admission record to update paymentReceived
+        // Find the admission record
         const admission = await Admission.findById(req.params.id);
         if (!admission) {
             return res.status(404).json({ message: 'Student record not found' });
         }
 
-        // Update paymentReceived in Admission
-        admission.paymentReceived += paymentAmount;
+        // Check if payment exceeds remaining fee
+        const remainingFee = admission.totalFee - admission.paymentReceived;
+        if (paymentAmount > remainingFee) {
+            return res.status(400).json({ message: 'Payment amount cannot exceed the remaining fee.' });
+        }
+
+        // Calculate the fixed installment amount
+        const installmentAmount = admission.totalFee / admission.installments;
+
+        // Calculate the total payment to be recorded
+        let totalPaymentToBeRecorded = paymentAmount;
+
+        // Update the paymentReceived in Admission, but only add the installment amount if within limits
+        if (totalPaymentToBeRecorded + admission.paymentReceived > admission.totalFee) {
+            totalPaymentToBeRecorded = admission.totalFee - admission.paymentReceived;
+        }
+
+        admission.paymentReceived += totalPaymentToBeRecorded;
         await admission.save();
 
         // Create a new payment entry in StudentPayment
         const newPayment = new StudentPayment({
             student: admission._id,
-            amount: paymentAmount,
+            amount: totalPaymentToBeRecorded,
             installmentNumber: admission.installments,
             paymentMethod: 'Cash', // or adjust as per your needs
         });
         await newPayment.save();
 
         // Update Installment Status based on the cumulative payments
-        const remainingFee = admission.totalFee - admission.paymentReceived;
-        const installmentAmount = admission.totalFee / admission.installments;
-
+        const currentTotalPayments = admission.paymentReceived;
+        
         // Initialize installmentsStatus if it's not already an array
         if (!Array.isArray(admission.installmentsStatus)) {
             admission.installmentsStatus = Array(admission.installments).fill('Pending');
@@ -44,7 +59,7 @@ router.put('/:id', async (req, res) => {
 
         // Ensure updates to installment statuses
         for (let i = 0; i < admission.installments; i++) {
-            if (admission.paymentReceived >= installmentAmount * (i + 1) && admission.installmentsStatus[i] !== 'Completed') {
+            if (currentTotalPayments >= installmentAmount * (i + 1) && admission.installmentsStatus[i] !== 'Completed') {
                 admission.installmentsStatus[i] = 'Completed';
             }
         }
