@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { format } from 'date-fns'; 
-
-
+import { format } from 'date-fns';
 
 const AdmissionForm = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [showSuccessModal, setShowSuccessModal] = useState(false); // State to control the success modal
   const [dob, setDob] = useState('');
   const [formData, setFormData] = useState({
     serialNumber: '',
@@ -53,20 +53,17 @@ const AdmissionForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage('');
-    
+
     if (!validateForm()) return;
 
     const dob = formData.dob;
-
-    // Ensure dob is not empty before formatting
     if (!dob) {
-      console.error('Date of Birth is required.');
       setErrorMessage('Date of Birth is required.');
       return;
     }
 
     try {
-      const formattedDobDate = formatDate(dob); // Now this will work correctly
+      const formattedDobDate = formatDate(dob);
 
       const cloudinaryDataAadhaar = new FormData();
       cloudinaryDataAadhaar.append('file', formData.aadhaarCard);
@@ -89,23 +86,23 @@ const AdmissionForm = () => {
       const passportUrl = cloudinaryResponsePassport.data.secure_url;
 
       const rollNumber = `IDA${formData.serialNumber}`;
-      const admissionDate = format(new Date(), 'yyyy-MM-dd'); // Use yyyy-MM-dd for consistency
+      const admissionDate = format(new Date(), 'yyyy-MM-dd');
       const formattedStartDate = formatDate(formData.startDate);
       const formattedPaymentDate = formatDate(formData.paymentDate);
 
-      // Now you can send these URLs along with other form data to your backend
-      const response = await axios.post('http://3.145.137.229:5000/api/admissions', {
+      await axios.post('http://3.145.137.229:5000/api/admissions', {
         ...formData,
         dob: formattedDobDate,
         aadhaarCardUrl: aadhaarUrl,
-        passportPhotoUrl: passportUrl, 
+        passportPhotoUrl: passportUrl,
         rollNumber: rollNumber,
         admissionDate: admissionDate,
         startDate: formattedStartDate,
         paymentDate: formattedPaymentDate,
       });
 
-      navigate('/salesDashboard');
+      // Show success modal when the submission is successful
+      setShowSuccessModal(true);
     } catch (error) {
       setErrorMessage('Failed to submit the form. Please try again.');
     }
@@ -114,7 +111,7 @@ const AdmissionForm = () => {
   const validateForm = () => {
     const { mobileNumber, email, dob } = formData;
     const emailRegex = /\S+@\S+\.\S+/;
-    const mobileRegex = /^[0-9]{10}$/; // Assuming Indian mobile number format
+    const mobileRegex = /^[0-9]{10}$/;
 
     if (!emailRegex.test(email)) {
       setErrorMessage("Invalid email format");
@@ -124,7 +121,6 @@ const AdmissionForm = () => {
       setErrorMessage("Mobile number must be 10 digits");
       return false;
     }
-    // Ensure DOB is valid
     if (!dob) {
       setErrorMessage("Date of Birth is required");
       return false;
@@ -181,21 +177,38 @@ const AdmissionForm = () => {
     }
     const dateObj = new Date(`${yyyy}-${mm}-${dd}`);
     dateObj.setHours(0, 0, 0, 0);
-    return dateObj.toISOString().split('T')[0]; // 'yyyy-mm-dd'
+    return dateObj.toISOString().split('T')[0];
   };
-  
 
-  return (<div className='pt-20'>
-    
-      
+  return (
+    <div className='pt-20'>
       {errorMessage && (
         <div className="bg-red-500 text-white p-4 rounded mb-4">
           {errorMessage}
         </div>
       )}
- 
-    <form onSubmit={handleSubmit} className="max-w-2xl mx-auto p-4 space-y-4">
-    <button
+
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-8 rounded-lg shadow-lg">
+            <h2 className="text-xl font-bold mb-4">Admission Successful!</h2>
+            <button
+              onClick={() => {
+                setShowSuccessModal(false);
+                navigate('/salesDashboard');
+              }}
+              className="bg-blue-500 text-white py-2 px-4 rounded"
+            >
+              Go to Sales Dashboard
+            </button>
+          </div>
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="max-w-2xl mx-auto p-4 space-y-4">
+        <h2 className="text-2xl font-bold mb-4">Admission Form</h2>
+        <button
         onClick={() => navigate('/salesDashboard')}
         className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 mb-4"
       >
@@ -618,8 +631,9 @@ const AdmissionForm = () => {
       >
         Submit
       </button>
-    </form>
-    </div>);
+      </form>
+    </div>
+  );
 };
 
 export default AdmissionForm;

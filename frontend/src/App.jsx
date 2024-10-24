@@ -20,6 +20,7 @@ import PerformancePage from "./assets/components/facultySection/performance/Perf
 import FacultyLogin from "./assets/components/facultySection/FacultiesLogin";
 import FacultyDashboard from "./assets/components/facultySection/FacultyDashboard";
 import ResourceSharing from "./assets/components/facultySection/ResourceSharing";
+import DemosReceived from "./assets/components/facultySection/DemoReceived";
 import HRDashboard from "./assets/components/HRSection/HRDashboard";
 import HRLogin from "./assets/components/HRSection/HRLogin";
 import StudentStatus from "./assets/components/HRSection/StudentStatus";
@@ -144,6 +145,7 @@ function App() {
             <Route path="/facultiesDashboard/attendance" element={<AttendancePage />} />
             <Route path="/facultiesDashboard/performance" element={<PerformancePage />} />
             <Route path="/facultiesDashboard/resourceSharing" element={<ResourceSharing />} />
+            <Route path="/facultiesDashboard/demosReceived" element={<DemosReceived />} />
 
             {/* HR section routes */}
             <Route path="/HRDashboard" element={<HRDashboard />} />
