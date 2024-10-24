@@ -39,6 +39,9 @@ function App() {
           className="min-h-screen bg-cover bg-center p-6"
           style={{
             backgroundImage: "url('https://res.cloudinary.com/dpwcvgpt3/image/upload/v1729494553/blauc6qmmxwxaqdgdago.jpg')",
+            backgroundSize: "contain", // Set background size to contain
+            backgroundPosition: "center", // Center the background image
+            backgroundRepeat: "no-repeat", // Prevent the image from repeating
           }}
         >
           <Routes>

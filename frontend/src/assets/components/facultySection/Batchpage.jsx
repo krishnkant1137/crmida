@@ -8,10 +8,13 @@ const BatchPage = () => {
   const [rollNumber, setRollNumber] = useState("");
   const [newBatchName, setNewBatchName] = useState("");
   const [isConfirmingRemoveBatch, setIsConfirmingRemoveBatch] = useState(null);
-  const [isConfirmingRemoveStudent, setIsConfirmingRemoveStudent] =
-    useState(null);
+  const [isConfirmingRemoveStudent, setIsConfirmingRemoveStudent] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false); // State to control the success message visibility
+  const [showConfirmRemoveBatch, setShowConfirmRemoveBatch] = useState(false); // State for removing batch confirmation
+  const [showConfirmRemoveStudent, setShowConfirmRemoveStudent] = useState(false); // State for removing student confirmation
 
   useEffect(() => {
     const fetchBatches = async () => {
@@ -45,6 +48,9 @@ const BatchPage = () => {
         const newBatch = await response.json();
         setBatches([...batches, newBatch]);
         setNewBatchName("");
+        setSuccessMessage("Batch added successfully!");
+        setShowSuccess(true); // Show success message
+        setTimeout(() => setShowSuccess(false), 3000); // Hide success message after 3 seconds
       } catch (error) {
         console.error("Error creating batch:", error);
       }
@@ -83,8 +89,10 @@ const BatchPage = () => {
     }
   };
 
-  const handleRemoveStudent = (student) =>
+  const handleRemoveStudent = (student) => {
     setIsConfirmingRemoveStudent(student);
+    setShowConfirmRemoveStudent(true);
+  };
 
   const confirmRemoveStudent = async () => {
     if (selectedBatch && isConfirmingRemoveStudent) {
@@ -109,11 +117,15 @@ const BatchPage = () => {
         console.error("Error removing student from batch:", error);
       } finally {
         setIsConfirmingRemoveStudent(null);
+        setShowConfirmRemoveStudent(false);
       }
     }
   };
 
-  const handleRemoveBatch = (batchId) => setIsConfirmingRemoveBatch(batchId);
+  const handleRemoveBatch = (batchId) => {
+    setIsConfirmingRemoveBatch(batchId);
+    setShowConfirmRemoveBatch(true);
+  };
 
   const confirmRemoveBatch = async (batchId) => {
     try {
@@ -124,13 +136,24 @@ const BatchPage = () => {
       setBatches(batches.filter((batch) => batch._id !== batchId));
       setSelectedBatch(null);
       setIsConfirmingRemoveBatch(null);
+      setShowConfirmRemoveBatch(false);
+      setSuccessMessage("Batch removed successfully!");
+      setShowSuccess(true); // Show success message
+      setTimeout(() => setShowSuccess(false), 3000); // Hide success message after 3 seconds
     } catch (error) {
       console.error("Error removing batch:", error);
     }
   };
 
-  const cancelRemoveBatch = () => setIsConfirmingRemoveBatch(null);
-  const cancelRemoveStudent = () => setIsConfirmingRemoveStudent(null);
+  const cancelRemoveBatch = () => {
+    setIsConfirmingRemoveBatch(null);
+    setShowConfirmRemoveBatch(false);
+  };
+
+  const cancelRemoveStudent = () => {
+    setIsConfirmingRemoveStudent(null);
+    setShowConfirmRemoveStudent(false);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-200 pt-20">
@@ -145,6 +168,12 @@ const BatchPage = () => {
           <h1 className="text-3xl font-semibold mb-6 text-center">
             Manage Batches
           </h1>
+
+          {showSuccess && (
+            <div className={`mb-4 p-4 bg-green-100 border border-green-300 rounded-md text-green-700 text-center transition-opacity duration-300 ease-in-out opacity-100`}>
+              {successMessage}
+            </div>
+          )}
 
           <div className="flex gap-4 mb-6">
             <input
@@ -190,8 +219,8 @@ const BatchPage = () => {
             </div>
           )}
 
-          {isConfirmingRemoveBatch && (
-            <div className="mt-4 p-4 bg-red-100 border border-red-300 rounded-md text-center">
+          {showConfirmRemoveBatch && (
+            <div className="mt-4 p-4 bg-red-100 border border-red-300 rounded-md text-center transition-opacity duration-300 ease-in-out opacity-100">
               <p>Are you sure you want to delete this batch?</p>
               <div className="flex justify-center mt-4 gap-4">
                 <button
@@ -237,13 +266,13 @@ const BatchPage = () => {
                       <th className="py-2 px-4 border">Roll No</th>
                       <th className="py-2 px-4 border">Name</th>
                       <th className="py-2 px-4 border">Mobile</th>
-                      <th className="py-2 px-4 border">courseName</th>
+                      <th className="py-2 px-4 border">Course Name</th>
+                      <th className="py-2 px-4 border">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {selectedBatch.students.map((student) => (
                       <tr key={student.rollNumber} className="hover:bg-gray-50">
-                        
                         <td className="py-2 px-4 border">
                           {student.rollNumber}
                         </td>
@@ -267,8 +296,9 @@ const BatchPage = () => {
               </div>
             </div>
           )}
-          {isConfirmingRemoveStudent && (
-            <div className="mt-4 p-4 bg-red-100 border border-red-300 rounded-md text-center">
+
+          {showConfirmRemoveStudent && (
+            <div className="mt-4 p-4 bg-red-100 border border-red-300 rounded-md text-center transition-opacity duration-300 ease-in-out opacity-100">
               <p>Are you sure you want to remove this student?</p>
               <div className="flex justify-center mt-4 gap-4">
                 <button

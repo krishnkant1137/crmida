@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const AttendancePage = () => {
   const navigate = useNavigate();
@@ -10,13 +10,16 @@ const AttendancePage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false); // State for success message
+  const [successMessage, setSuccessMessage] = useState(""); // State for success message content
+  const [showAlreadySubmitted, setShowAlreadySubmitted] = useState(false); // State for already submitted message
 
   // Fetch batches when component mounts
   useEffect(() => {
     const fetchBatches = async () => {
       try {
         setLoading(true);
-        const response = await fetch("/api/attendance"); // Updated to match your route setup
+        const response = await fetch("/api/attendance");
         if (!response.ok) throw new Error("Failed to fetch batches");
         const data = await response.json();
         setBatches(data);
@@ -72,24 +75,30 @@ const AttendancePage = () => {
       });
 
       if (response.ok) {
-        alert("Attendance submitted successfully!");
+        setSuccessMessage("Attendance submitted successfully!"); // Set success message
+        setShowSuccess(true); // Show success message
         setAttendanceData({});
         setStudents([]);
         setSelectedBatch("");
+        setTimeout(() => setShowSuccess(false), 3000); // Hide success message after 3 seconds
+      } else if (response.status === 400) {
+        // Assuming 400 status indicates already submitted attendance
+        setShowAlreadySubmitted(true); // Show already submitted message
+        setTimeout(() => setShowAlreadySubmitted(false), 3000); // Hide message after 3 seconds
       } else {
         const errorData = await response.json();
-        throw new Error(errorData.message || "FAILED TO SUBMIT ATTENDANCE!");
+        throw new Error(errorData.message || "Failed to submit attendance!");
       }
     } catch (error) {
-      alert("today attendance is done.");
+      console.error("Error submitting attendance:", error); // Log error for debugging
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="bg-gradient-to-br from-green-100 to-grey-300 min-h-screen p-6 mt20 pt20">
-      <h1 className="text-4xl font-bold mb-6 text-center text-gray-800 animate-pulse mt-20">
+    <div className="bg-gradient-to-br from-green-100 to-gray-300 min-h-screen p-6 mt-10"> {/* Added mt-10 for margin top */}
+      <h1 className="text-4xl font-bold mb-6 text-center text-gray-800 animate-pulse">
         Attendance
       </h1>
       <button
@@ -178,6 +187,20 @@ const AttendancePage = () => {
               {isSubmitting ? "Submitting..." : "Submit Attendance"}
             </button>
           </div>
+        </div>
+      )}
+
+      {/* Success Message */}
+      {showSuccess && (
+        <div className={`mt-4 p-4 bg-green-100 border border-green-300 rounded-md text-center transition-opacity duration-300 ease-in-out opacity-100`}>
+          {successMessage}
+        </div>
+      )}
+
+      {/* Already Submitted Message */}
+      {showAlreadySubmitted && (
+        <div className={`mt-4 p-4 bg-red-100 border border-red-300 rounded-md text-center transition-opacity duration-300 ease-in-out opacity-100`}>
+          Today's attendance has already been submitted!
         </div>
       )}
     </div>

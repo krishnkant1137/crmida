@@ -9,18 +9,26 @@ const EnquirySearch = () => {
   const [response, setResponse] = useState('');
   const [loading, setLoading] = useState(false);
   const [updateLoading, setUpdateLoading] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false); // State for showing spinner
 
   // Handle search
   const handleSearch = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setShowSpinner(true); // Show spinner
     try {
       const res = await axios.get(`http://3.145.137.229:5000/api/students/search?phone=${phoneNumber}`);
       setStudentData(res.data);
       setResponse(res.data.response || '');
+
+      // Hide spinner after 1 second
+      setTimeout(() => {
+        setShowSpinner(false);
+      }, 1000);
     } catch (error) {
       console.error('Error fetching student data:', error);
       alert('Error fetching student data');
+      setShowSpinner(false); // Hide spinner in case of error
     } finally {
       setLoading(false);
     }
@@ -47,17 +55,14 @@ const EnquirySearch = () => {
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-lg mt-8 pt-20">
-       <button
-          onClick={() => navigate('/salesDashboard')}
-          className="bg-gray-500 text-white p-2 rounded-lg hover:bg-gray-600 transition duration-200"
-        >
-          Back
-        </button>
-     <div className="flex justify-center mb-4">
-     
-      <h1 className="text-center text-3xl font-bold text-gray-800 mb-6">Student Enquiry Section</h1>
-
-     
+      <button
+        onClick={() => navigate('/salesDashboard')}
+        className="bg-gray-500 text-white p-2 rounded-lg hover:bg-gray-600 transition duration-200"
+      >
+        Back
+      </button>
+      <div className="flex justify-center mb-4">
+        <h1 className="text-center text-3xl font-bold text-gray-800 mb-6">Student Enquiry Section</h1>
       </div>
 
       {/* Search Section */}
@@ -79,6 +84,13 @@ const EnquirySearch = () => {
           </button>
         </div>
       </form>
+
+      {/* Spinner Animation */}
+      {showSpinner && (
+        <div className="flex justify-center mb-4">
+          <div className="animate-spin rounded-full border-t-2 border-blue-600 w-16 h-16"></div>
+        </div>
+      )}
 
       {/* Display Student Data */}
       {studentData && (
@@ -110,7 +122,9 @@ const EnquirySearch = () => {
         </div>
       )}
 
-      {!studentData && !loading && <p className="text-center mt-4 text-gray-500">No student found. Please search again.</p>}
+      {!studentData && !loading && !showSpinner && (
+        <p className="text-center mt-4 text-gray-500">No student found. Please search again.</p>
+      )}
     </div>
   );
 };
