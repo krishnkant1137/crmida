@@ -23,7 +23,7 @@ const Demo = () => {
     };
 
     try {
-      await axios.post('http://localhost:5000/api/demo', demoData);
+      await axios.post('http://3.145.137.229:5000/api/demo', demoData);
       alert('Demo successfully recorded!');
       // Reset form fields
       setName('');
@@ -116,7 +116,7 @@ const Demo = () => {
           >
             <option value="">Select Teacher</option>
             <option value="Akshay Sir">Akshay Sir</option>
-            <option value="Eshwar Sir">Eshwar Sir</option>
+            <option value="Eshwar Sir">Ashwar Sir</option>
             <option value="Gaurav Sir">Gaurav Sir</option>
             <option value="Vishal Sir">Vishal Sir</option>
             <option value="Shubham Sir">Shubham Sir</option>
