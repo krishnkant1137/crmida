@@ -26,6 +26,7 @@ import HRLogin from "./assets/components/HRSection/HRLogin";
 import StudentStatus from "./assets/components/HRSection/StudentStatus";
 import AdminLogin from "./assets/components/adminSection/AdminLogin";
 import AdminDashboard from "./assets/components/adminSection/AdminDashboard";
+import AddFaculty from "./assets/components/adminSection/AddFaculty";
 import SeeAllSections from "./assets/components/adminSection/SeeAllSections";
 import RevenueChart from "./assets/components/adminSection/RevenueChart";
 import RevenueLineChart from "./assets/components/adminSection/RevenueLineChart";
@@ -153,6 +154,7 @@ function App() {
 
             {/* Admin section routes */}
             <Route path="/AdminDashboard" element={<AdminDashboard />} />
+            <Route path="/AdminDashboard/AddFaculty" element={<AddFaculty />} />
             <Route path="/AdminDashboard/SeeAllSections" element={<SeeAllSections />} />
             <Route path="/AdminDashboard/RevenueChart" element={<RevenueChart />} />
             <Route path="/AdminDashboard/RevenueLineChart" element={<RevenueLineChart />} />
