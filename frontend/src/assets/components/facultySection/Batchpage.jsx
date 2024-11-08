@@ -36,7 +36,7 @@ const BatchPage = () => {
   const handleAddBatch = async () => {
     if (newBatchName) {
       try {
-        const response = await fetch("http://3.145.137.229:5000/api/batches/create", {
+        const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/batches/create", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ name: newBatchName }),

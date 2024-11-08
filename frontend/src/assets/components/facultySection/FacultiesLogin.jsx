@@ -17,7 +17,7 @@ const FacultyLogin = () => {
     console.log('Sending payload:', payload);
 
     try {
-      const response = await axios.post('http://3.145.137.229:5000/api/faculties/login', payload);
+      const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/api/faculties/login', payload);
       if (response.data.token) {
         localStorage.setItem('facultiesAuthToken', response.data.token);
         localStorage.setItem('userRole', 'faculties');

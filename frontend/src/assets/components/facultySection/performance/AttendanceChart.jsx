@@ -31,7 +31,7 @@ const AttendanceChart = () => {
     useEffect(() => {
         const fetchAttendanceData = async () => {
             try {
-                const response = await fetch('http://3.145.137.229:5000/api/performance/attendance-performance');
+                const response = await fetch(import.meta.env.VITE_BACKEND_URL + '/api/performance/attendance-performance');
                 if (!response.ok) throw new Error('Failed to fetch attendance data');
                 const data = await response.json();
 

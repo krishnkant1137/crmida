@@ -11,7 +11,7 @@ const AddFaculty = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/addFaculty/create-faculty', { name, email, password });
+      const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/api/addFaculty/create-faculty', { name, email, password });
       alert(response.data.message);
       navigate('/AdminDashboard'); // Redirect after successful creation
     } catch (error) {

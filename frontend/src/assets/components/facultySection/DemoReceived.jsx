@@ -11,7 +11,7 @@ const DemosReceived = () => {
   useEffect(() => {
     const fetchDemos = async () => {
       try {
-        const response = await axios.get('http://3.145.137.229:5000/api/demo?facultyName=Shubham Sir');
+        const response = await axios.get(import.meta.env.VITE_BACKEND_URL + '/api/demo?facultyName=Shubham Sir');
         const demos = response.data;
 
         const pending = demos.filter((demo) => !demo.isCompleted);
@@ -43,7 +43,7 @@ const DemosReceived = () => {
       setCompletedDemos(prev => [...prev, updatedDemo]);
   
       try {
-        await axios.put(`http://3.145.137.229:5000/api/demo/${id}`, { isCompleted: true });
+        await axios.put(import.meta.env.VITE_BACKEND_URL + `/api/demo/${id}`, { isCompleted: true });
       } catch (error) {
         console.error('Error marking demo as complete:', error);
         // Optionally, you can revert the state update if the request fails
@@ -56,7 +56,7 @@ const DemosReceived = () => {
 
   const removeDemo = async (id, isPending) => {
     try {
-      await axios.delete(`http://3.145.137.229:5000/api/demo/${id}`);
+      await axios.delete(import.meta.env.VITE_BACKEND_URL + `/api/demo/${id}`);
       if (isPending) {
         setPendingDemos((prev) => prev.filter((demo) => demo._id !== id));
       } else {

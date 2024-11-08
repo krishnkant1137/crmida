@@ -16,7 +16,7 @@ const AttendancePage = () => {
     const fetchBatches = async () => {
       try {
         setLoading(true);
-        const response = await fetch("http://3.145.137.229:5000/api/attendance"); // Updated to match your route setup
+        const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/attendance"); // Updated to match your route setup
         if (!response.ok) throw new Error("Failed to fetch batches");
         const data = await response.json();
         console.log('Fetched Batches:', data);
@@ -65,7 +65,7 @@ const AttendancePage = () => {
 
     try {
       setIsSubmitting(true);
-      const response = await fetch("http://3.145.137.229:5000/api/attendance/submit-attendance", {
+      const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/attendance/submit-attendance", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

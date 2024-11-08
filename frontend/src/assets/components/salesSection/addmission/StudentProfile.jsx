@@ -16,7 +16,7 @@ const StudentPayment = () => {
   useEffect(() => {
     const fetchStudentDetails = async () => {
       try {
-        const response = await axios.get(`http://3.145.137.229:5000/api/enrolled-students/${id}`);
+        const response = await axios.get(import.meta.env.VITE_BACKEND_URL + `/api/enrolled-students/${id}`);
         const studentData = response.data;
         setStudent(studentData);
 

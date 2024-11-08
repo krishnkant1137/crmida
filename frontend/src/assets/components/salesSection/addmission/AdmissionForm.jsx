@@ -90,7 +90,7 @@ const AdmissionForm = () => {
       const formattedStartDate = formatDate(formData.startDate);
       const formattedPaymentDate = formatDate(formData.paymentDate);
 
-      await axios.post('http://3.145.137.229:5000/api/admissions', {
+      await axios.post(import.meta.env.VITE_BACKEND_URL + '/api/admissions', {
         ...formData,
         dob: formattedDobDate,
         aadhaarCardUrl: aadhaarUrl,

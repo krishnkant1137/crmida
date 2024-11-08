@@ -23,7 +23,7 @@ const Demo = () => {
     };
 
     try {
-      await axios.post('http://3.145.137.229:5000/api/demo', demoData);
+      await axios.post(import.meta.env.VITE_BACKEND_URL + '/api/demo', demoData);
       alert('Demo successfully recorded!');
       // Reset form fields
       setName('');

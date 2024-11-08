@@ -14,7 +14,7 @@ const ResourceSharing = () => {
     const fetchResources = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://3.145.137.229:5000/resources'); // Update endpoint
+        const response = await fetch(import.meta.env.VITE_BACKEND_URL + '/resources'); // Update endpoint
         if (!response.ok) throw new Error('Failed to fetch resources');
         const data = await response.json();
         setResources(data);
@@ -37,7 +37,7 @@ const ResourceSharing = () => {
     formData.append('file', file);
 
     try {
-      const response = await fetch('http://3.145.137.229:5000/resources', {
+      const response = await fetch(import.meta.env.VITE_BACKEND_URL + '/resources', {
         method: 'POST',
         body: formData,
       });

@@ -31,7 +31,7 @@ const EnquirySearch = () => {
     e.preventDefault();
     setUpdateLoading(true);
     try {
-      const res = await axios.put('http://3.145.137.229:5000/api/students/enquiry/update-response', {
+      const res = await axios.put(import.meta.env.VITE_BACKEND_URL + '/api/students/enquiry/update-response', {
         phoneNumber,
         response,
       });
