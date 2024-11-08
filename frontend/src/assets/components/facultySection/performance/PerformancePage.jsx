@@ -73,7 +73,7 @@ const PerformancePage = () => {
     <div className="bg-gray-100 min-h-screen p-6 mt-8">
       <button
         onClick={() => navigate('/facultiesDashboard')}
-        className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 mb-4"
+        className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 mt-10"
       >
         Back
       </button>
