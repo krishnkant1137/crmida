@@ -9,7 +9,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://3.145.137.229:5000', 
+        target: import.meta.env.VITE_BACKEND_URL, 
         changeOrigin: true,
         secure: false,
       },
