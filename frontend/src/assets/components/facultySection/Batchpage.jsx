@@ -17,7 +17,7 @@ const BatchPage = () => {
     const fetchBatches = async () => {
       setLoading(true);
       try {
-        const response = await fetch("http://3.145.137.229:5000/api/batches");
+        const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/batches");
         if (!response.ok) throw new Error("Failed to fetch batches");
         const data = await response.json();
         console.log("Fetched Batches:", data);
@@ -63,7 +63,7 @@ const BatchPage = () => {
       }
 
       try {
-        const response = await fetch(`http://3.145.137.229:5000/api/batches/add-student`, {
+        const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/batches/add-student`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ rollNumber, batchId: selectedBatch._id }),
@@ -89,7 +89,7 @@ const BatchPage = () => {
   const confirmRemoveStudent = async () => {
     if (selectedBatch && isConfirmingRemoveStudent) {
       try {
-        const response = await fetch(`http://3.145.137.229:5000/api/batches/remove-student`, {
+        const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/batches/remove-student`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -117,7 +117,7 @@ const BatchPage = () => {
 
   const confirmRemoveBatch = async (batchId) => {
     try {
-      const response = await fetch(`http://3.145.137.229:5000/api/batches/${batchId}`, {
+      const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/batches/${batchId}`, {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Error removing batch");
