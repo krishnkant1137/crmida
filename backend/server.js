@@ -2,7 +2,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
-const fs = require('fs');
 require('dotenv').config();
 
 const enquiryRoutes = require('./routes/enquiry');
@@ -26,24 +25,17 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5000', 'http://3.145.137.229:5173', 'http://3.145.137.229:5000'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
+  origin: ['http://localhost:5173', 'http://3.145.137.229:5000','http://localhost:5000'],  // Allowed origins
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+  credentials: true, // Allow cookies
 }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use('/uploads', express.static('uploads'));
+app.use(express.json()); // For parsing application/json
+app.use(express.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
+app.use('/uploads', express.static('uploads')); // Serve uploaded files
 
-// Serve static files from the React app if 'dist' folder exists
-const distPath = path.join(__dirname, '../frontend/dist');
-if (fs.existsSync(distPath)) {
-  app.use(express.static(distPath));
-  // Catch-all route for client-side routing
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(distPath, 'index.html'));
-  });
-}
+// Serve static files from the React app
+// app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
 // Routes
 app.use('/api/enquiry', enquiryRoutes);
@@ -66,18 +58,23 @@ app.use('/api/hrStudent', hrStudentRoute);
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('MongoDB connected successfully');
-    // Start server after successful DB connection
-    app.listen(PORT, '0.0.0.0', () => {
-      console.log(`Server running on port ${PORT}`);
-    });
   })
   .catch(err => {
     console.error('MongoDB connection error:', err);
-    process.exit(1); // Terminate the app
   });
+
+// Catch-all route for client-side routing
+app.get('/', (req, res) => {
+  res.send('backend server connected successfully');
+});
 
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something broke!');
+});
+
+// Start server
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
 });
