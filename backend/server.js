@@ -35,7 +35,7 @@ app.use(express.urlencoded({ extended: true })); // For parsing application/x-ww
 app.use('/uploads', express.static('uploads')); // Serve uploaded files
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
 // Routes
 app.use('/api/enquiry', enquiryRoutes);
@@ -65,7 +65,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 // Catch-all route for client-side routing
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, '../frontend/dist', 'index.html'));
 });
 
 // Error handling middleware
